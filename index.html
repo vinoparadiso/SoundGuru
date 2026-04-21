@@ -18,7 +18,7 @@
                         neonLight: '#FF8A4C',
                         silver: '#A8A9AD',
                         silverLight: '#C8C9CC',
-                        dark: {
+                        dk: {
                             900: '#000000',
                             800: '#0A0A0A',
                             700: '#111111',
@@ -28,43 +28,55 @@
                         }
                     },
                     fontFamily: {
-                        heading: ['Space Grotesk', 'sans-serif'],
-                        body: ['Inter', 'sans-serif'],
-                        geist: ['Geist', 'sans-serif'],
+                        heading: ['"Space Grotesk"', 'sans-serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                        geist: ['"Geist"', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
     <style>
+        :root {
+            --neon: #FF5F1F;
+            --neon-light: #FF8A4C;
+            --silver: #A8A9AD;
+            --silver-light: #C8C9CC;
+            --bg: #000000;
+            --card: #111111;
+            --card-alt: #171717;
+            --border: rgba(255,255,255,0.06);
+            --border-hover: rgba(255,95,31,0.35);
+            --text: #ffffff;
+            --text-muted: #6b7280;
+            --text-dim: #3a3a3a;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
 
         .font-heading { font-family: 'Space Grotesk', sans-serif; }
         .font-geist { font-family: 'Geist', sans-serif; }
 
-        /* Grain texture overlay */
-        .grain::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.5;
-        }
-
-        /* Glow effects */
+        /* Neon utilities using CSS vars for reliability */
         .neon-glow { box-shadow: 0 0 30px rgba(255,95,31,0.3), 0 0 60px rgba(255,95,31,0.1); }
         .neon-glow-sm { box-shadow: 0 0 15px rgba(255,95,31,0.25); }
         .neon-text-glow { text-shadow: 0 0 40px rgba(255,95,31,0.4), 0 0 80px rgba(255,95,31,0.15); }
 
-        /* Silver shimmer */
         .silver-shimmer {
             background: linear-gradient(135deg, #A8A9AD 0%, #E0E0E0 25%, #A8A9AD 50%, #808080 75%, #A8A9AD 100%);
             background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
             animation: shimmer 4s ease-in-out infinite;
         }
 
@@ -79,13 +91,8 @@
         }
 
         @keyframes pulseNeon {
-            0%, 100% { opacity: 1; box-shadow: 0 0 30px rgba(255,95,31,0.3); }
-            50% { opacity: 0.85; box-shadow: 0 0 50px rgba(255,95,31,0.5); }
-        }
-
-        @keyframes slideIn {
-            0% { transform: translateX(-100%); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
+            0%, 100% { box-shadow: 0 0 30px rgba(255,95,31,0.3); }
+            50% { box-shadow: 0 0 50px rgba(255,95,31,0.5); }
         }
 
         @keyframes barPulse {
@@ -93,101 +100,92 @@
             50% { transform: scaleY(1); }
         }
 
-        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
-        .animate-delay-1 { animation-delay: 0.1s; opacity: 0; }
-        .animate-delay-2 { animation-delay: 0.2s; opacity: 0; }
-        .animate-delay-3 { animation-delay: 0.3s; opacity: 0; }
-        .animate-delay-4 { animation-delay: 0.4s; opacity: 0; }
-        .animate-delay-5 { animation-delay: 0.5s; opacity: 0; }
-        .animate-delay-6 { animation-delay: 0.6s; opacity: 0; }
+        .anim-fiu { animation: fadeInUp 0.8s ease-out forwards; }
+        .anim-d1 { animation-delay: 0.1s; opacity: 0; }
+        .anim-d2 { animation-delay: 0.2s; opacity: 0; }
+        .anim-d3 { animation-delay: 0.3s; opacity: 0; }
+        .anim-d4 { animation-delay: 0.4s; opacity: 0; }
+        .anim-d5 { animation-delay: 0.5s; opacity: 0; }
 
-        /* Audio bars */
         .audio-bar {
             width: 3px;
             background: linear-gradient(to top, #FF5F1F, #FF8A4C);
             border-radius: 2px;
             animation: barPulse 0.8s ease-in-out infinite;
+            transform-origin: bottom;
         }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0A0A0A; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #FF5F1F; }
-
-        /* Equipment card hover */
-        .equip-card {
-            border: 1px solid rgba(255,255,255,0.06);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .equip-card:hover {
-            border-color: rgba(255,95,31,0.4);
-            background: rgba(255,95,31,0.03);
-            transform: translateY(-2px);
-        }
-        .equip-card:hover .equip-icon { color: #FF5F1F; transform: scale(1.1); }
-        .equip-card:hover .equip-name { color: #FF5F1F; }
-
-        /* Image treatment - B&W high contrast */
+        /* B&W high-contrast image treatment */
         .bw-contrast {
-            filter: grayscale(100%) contrast(1.4) brightness(0.85);
-            transition: filter 0.6s ease;
+            filter: grayscale(100%) contrast(1.35) brightness(0.85);
+            transition: filter 0.6s ease, transform 0.7s ease;
         }
         .bw-contrast:hover {
             filter: grayscale(60%) contrast(1.2) brightness(0.9);
         }
 
-        /* Story card */
-        .story-card {
-            transition: all 0.4s ease;
-        }
-        .story-card:hover {
-            transform: scale(1.01);
-        }
-        .story-card:hover .story-overlay {
-            opacity: 1;
-        }
-        .story-card:hover .story-img {
-            transform: scale(1.05);
-        }
-
-        /* CTA pulse */
-        .cta-pulse {
-            animation: pulseNeon 2.5s ease-in-out infinite;
-        }
-
-        /* Divider line */
+        /* Neon divider */
         .neon-divider {
             height: 1px;
-            background: linear-gradient(to right, transparent, rgba(255,95,31,0.4), transparent);
+            background: linear-gradient(to right, transparent, rgba(255,95,31,0.35), transparent);
         }
+
+        /* Equipment card */
+        .equip-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 20px;
+            transition: all 0.35s ease;
+        }
+        .equip-card:hover {
+            border-color: var(--border-hover);
+            background: rgba(255,95,31,0.025);
+            transform: translateY(-2px);
+        }
+        .equip-card:hover .eq-icon { color: var(--neon); transform: scale(1.1); }
+        .equip-card:hover .eq-name { color: var(--neon); }
+        .eq-icon { transition: all 0.35s ease; color: var(--silver); }
+        .eq-name { transition: color 0.3s ease; }
 
         /* Team card */
+        .team-card .team-img {
+            filter: grayscale(100%) contrast(1.3) brightness(0.8);
+            transition: all 0.5s ease;
+        }
         .team-card:hover .team-img {
-            filter: grayscale(0%) contrast(1.1);
+            filter: grayscale(0%) contrast(1.1) brightness(0.9);
             transform: scale(1.03);
         }
-        .team-card:hover .team-role {
-            color: #FF5F1F;
-        }
+        .team-card:hover .team-role { color: var(--neon); }
+        .team-role { transition: color 0.3s ease; }
 
-        /* Navigation active indicator */
-        .nav-link {
-            position: relative;
-            transition: color 0.3s ease;
+        /* Story card */
+        .story-img {
+            transition: transform 0.7s ease;
         }
+        .story-card:hover .story-img { transform: scale(1.05); }
+        .story-overlay {
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .story-card:hover .story-overlay { opacity: 1; }
+
+        /* Nav link */
+        .nav-link { position: relative; transition: color 0.3s ease; }
         .nav-link::after {
             content: '';
             position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #FF5F1F;
+            bottom: -4px; left: 0;
+            width: 0; height: 2px;
+            background: var(--neon);
             transition: width 0.3s ease;
         }
         .nav-link:hover::after { width: 100%; }
-        .nav-link:hover { color: #FF5F1F; }
+        .nav-link:hover { color: var(--neon); }
+
+        /* CTA pulse */
+        .cta-pulse { animation: pulseNeon 2.5s ease-in-out infinite; }
 
         /* Mobile menu */
         .mobile-menu {
@@ -196,242 +194,230 @@
         }
         .mobile-menu.open { transform: translateX(0); }
 
-        /* Toast notification */
+        /* Toast */
         .toast {
             transform: translateY(100px);
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
+        .toast.show { transform: translateY(0); opacity: 1; }
 
-        /* Smooth scroll */
-        html { scroll-behavior: smooth; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon); }
+
+        /* Form inputs */
+        input, select, textarea {
+            font-family: 'Inter', sans-serif;
+        }
+        select { cursor: pointer; }
+
+        /* Checkbox accent fix for cross-browser */
+        input[type="checkbox"] {
+            accent-color: #FF5F1F;
+            width: 14px;
+            height: 14px;
+            border-radius: 2px;
+        }
     </style>
 </head>
-<body class="grain">
+<body>
 
-<!-- TOAST NOTIFICATION -->
-<div id="toast" class="toast fixed bottom-6 right-6 z-[10000] bg-dark-500 border border-neon/30 rounded-lg px-5 py-3 flex items-center gap-3 shadow-2xl">
-    <iconify-icon icon="lucide:check-circle" class="text-neon text-lg"></iconify-icon>
-    <span class="text-sm font-medium" id="toast-msg">Message sent successfully</span>
+<!-- TOAST -->
+<div id="toast" class="toast" style="position:fixed;bottom:24px;right:24px;z-index:10000;background:#1E1E1E;border:1px solid rgba(255,95,31,0.3);border-radius:8px;padding:12px 20px;display:flex;align-items:center;gap:10px;box-shadow:0 20px 40px rgba(0,0,0,0.5);">
+    <iconify-icon icon="lucide:check-circle" style="color:#FF5F1F;font-size:18px;"></iconify-icon>
+    <span style="font-size:13px;font-weight:500;" id="toast-msg">Sent!</span>
 </div>
 
-<!-- NAVIGATION -->
-<nav class="fixed top-0 left-0 right-0 z-[1000] bg-black/80 backdrop-blur-xl border-b border-white/5">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="flex items-center justify-between h-16">
-            <!-- Logo -->
-            <a href="#" class="flex items-center gap-2.5">
-                <div class="w-8 h-8 bg-neon rounded-sm flex items-center justify-center neon-glow-sm">
-                    <iconify-icon icon="lucide:volume-2" class="text-black text-lg"></iconify-icon>
+<!-- NAV -->
+<nav id="mainNav" style="position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(0,0,0,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.04);">
+    <div style="max-width:1280px;margin:0 auto;padding:0 20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;height:60px;">
+            <a href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;">
+                <div style="width:32px;height:32px;background:#FF5F1F;border-radius:3px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(255,95,31,0.25);">
+                    <iconify-icon icon="lucide:volume-2" style="color:#000;font-size:16px;"></iconify-icon>
                 </div>
-                <span class="font-heading font-bold text-lg tracking-tight">SOUNDHAUS</span>
+                <span class="font-heading" style="font-weight:700;font-size:17px;letter-spacing:-0.02em;">SOUNDHAUS</span>
             </a>
-
-            <!-- Desktop Nav -->
-            <div class="hidden md:flex items-center gap-8">
-                <a href="#sound" class="nav-link text-xs font-geist font-medium uppercase tracking-widest text-silver">Our Sound</a>
-                <a href="#team" class="nav-link text-xs font-geist font-medium uppercase tracking-widest text-silver">Team</a>
-                <a href="#equipment" class="nav-link text-xs font-geist font-medium uppercase tracking-widest text-silver">Equipment</a>
-                <a href="#stories" class="nav-link text-xs font-geist font-medium uppercase tracking-widest text-silver">Stories</a>
-                <a href="#booking" class="bg-neon text-black font-heading font-semibold text-sm px-5 py-2.5 rounded-sm hover:bg-neonLight transition-colors neon-glow-sm">
-                    BOOK NOW
-                </a>
+            <div style="display:flex;align-items:center;gap:32px;" class="hidden md:flex">
+                <a href="#sound" class="nav-link" style="color:#A8A9AD;font-size:11px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;text-decoration:none;">Our Sound</a>
+                <a href="#team" class="nav-link" style="color:#A8A9AD;font-size:11px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;text-decoration:none;">Team</a>
+                <a href="#equipment" class="nav-link" style="color:#A8A9AD;font-size:11px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;text-decoration:none;">Equipment</a>
+                <a href="#stories" class="nav-link" style="color:#A8A9AD;font-size:11px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;text-decoration:none;">Stories</a>
+                <a href="#booking" style="background:#FF5F1F;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;padding:10px 20px;border-radius:3px;text-decoration:none;box-shadow:0 0 15px rgba(255,95,31,0.25);transition:background 0.2s;" onmouseover="this.style.background='#FF8A4C'" onmouseout="this.style.background='#FF5F1F'">BOOK NOW</a>
             </div>
-
-            <!-- Mobile burger -->
-            <button id="menuBtn" class="md:hidden w-10 h-10 flex items-center justify-center border border-white/10 rounded-sm">
-                <iconify-icon icon="lucide:menu" class="text-xl"></iconify-icon>
+            <button id="menuBtn" class="md:hidden" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.1);border-radius:3px;background:transparent;color:#fff;cursor:pointer;">
+                <iconify-icon icon="lucide:menu" style="font-size:20px;"></iconify-icon>
             </button>
         </div>
     </div>
 </nav>
 
 <!-- MOBILE MENU -->
-<div id="mobileMenu" class="mobile-menu fixed top-0 right-0 bottom-0 w-80 z-[1001] bg-dark-800 border-l border-white/5 p-8 flex flex-col">
-    <div class="flex justify-between items-center mb-12">
-        <span class="font-heading font-bold text-lg">MENU</span>
-        <button id="closeMenu" class="w-10 h-10 flex items-center justify-center border border-white/10 rounded-sm">
-            <iconify-icon icon="lucide:x" class="text-xl"></iconify-icon>
+<div id="menuOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1001;display:none;"></div>
+<div id="mobileMenu" class="mobile-menu" style="position:fixed;top:0;right:0;bottom:0;width:300px;z-index:1002;background:#0A0A0A;border-left:1px solid rgba(255,255,255,0.05);padding:32px;display:flex;flex-direction:column;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:40px;">
+        <span class="font-heading" style="font-weight:700;font-size:17px;">MENU</span>
+        <button id="closeMenu" style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.1);border-radius:3px;background:transparent;color:#fff;cursor:pointer;">
+            <iconify-icon icon="lucide:x" style="font-size:20px;"></iconify-icon>
         </button>
     </div>
-    <div class="flex flex-col gap-6">
-        <a href="#sound" class="mobile-link text-2xl font-heading font-semibold tracking-tight hover:text-neon transition-colors">Our Sound</a>
-        <a href="#team" class="mobile-link text-2xl font-heading font-semibold tracking-tight hover:text-neon transition-colors">Team</a>
-        <a href="#equipment" class="mobile-link text-2xl font-heading font-semibold tracking-tight hover:text-neon transition-colors">Equipment</a>
-        <a href="#stories" class="mobile-link text-2xl font-heading font-semibold tracking-tight hover:text-neon transition-colors">Stories</a>
-        <div class="neon-divider my-4"></div>
-        <a href="#booking" class="bg-neon text-black font-heading font-semibold text-center text-lg px-6 py-4 rounded-sm neon-glow-sm">
-            BOOK NOW
-        </a>
+    <div style="display:flex;flex-direction:column;gap:24px;">
+        <a href="#sound" class="mob-link" style="font-size:24px;font-family:'Space Grotesk',sans-serif;font-weight:600;text-decoration:none;color:#fff;letter-spacing:-0.02em;transition:color 0.2s;" onmouseover="this.style.color='#FF5F1F'" onmouseout="this.style.color='#fff'">Our Sound</a>
+        <a href="#team" class="mob-link" style="font-size:24px;font-family:'Space Grotesk',sans-serif;font-weight:600;text-decoration:none;color:#fff;letter-spacing:-0.02em;transition:color 0.2s;" onmouseover="this.style.color='#FF5F1F'" onmouseout="this.style.color='#fff'">Team</a>
+        <a href="#equipment" class="mob-link" style="font-size:24px;font-family:'Space Grotesk',sans-serif;font-weight:600;text-decoration:none;color:#fff;letter-spacing:-0.02em;transition:color 0.2s;" onmouseover="this.style.color='#FF5F1F'" onmouseout="this.style.color='#fff'">Equipment</a>
+        <a href="#stories" class="mob-link" style="font-size:24px;font-family:'Space Grotesk',sans-serif;font-weight:600;text-decoration:none;color:#fff;letter-spacing:-0.02em;transition:color 0.2s;" onmouseover="this.style.color='#FF5F1F'" onmouseout="this.style.color='#fff'">Stories</a>
+        <div class="neon-divider" style="margin:12px 0;"></div>
+        <a href="#booking" class="mob-link" style="background:#FF5F1F;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;text-align:center;padding:16px 24px;border-radius:3px;text-decoration:none;box-shadow:0 0 15px rgba(255,95,31,0.25);">BOOK NOW</a>
     </div>
-    <div class="mt-auto flex items-center gap-3 text-silver text-sm">
-        <iconify-icon icon="lucide:map-pin" class="text-neon"></iconify-icon>
+    <div style="margin-top:auto;display:flex;align-items:center;gap:8px;color:#A8A9AD;font-size:13px;">
+        <iconify-icon icon="lucide:map-pin" style="color:#FF5F1F;"></iconify-icon>
         Wellington, New Zealand
     </div>
 </div>
-<div id="menuOverlay" class="fixed inset-0 bg-black/60 z-[1000] hidden"></div>
 
-<!-- HERO SECTION -->
-<section class="relative min-h-screen flex items-end pb-12 md:pb-20 overflow-hidden">
-    <!-- Background Image -->
-    <div class="absolute inset-0">
-        <img src="https://picsum.photos/seed/rave-crowd-welly/1920/1080.jpg" alt="Rave crowd" class="w-full h-full object-cover bw-contrast" style="object-position: center 30%;">
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30"></div>
-        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/60"></div>
+<!-- ==================== HERO ==================== -->
+<section style="position:relative;min-height:100vh;display:flex;align-items:flex-end;padding-bottom:60px;overflow:hidden;">
+    <div style="position:absolute;inset:0;">
+        <img src="https://picsum.photos/seed/dark-rave-crowd-energetic/1920/1080.jpg" alt="Rave crowd" class="bw-contrast" style="width:100%;height:100%;object-fit:cover;object-position:center 30%;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top, #000 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.3) 100%);"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(to right, rgba(0,0,0,0.8) 0%, transparent 50%, rgba(0,0,0,0.6) 100%);"></div>
     </div>
 
     <!-- Audio bars decoration -->
-    <div class="absolute top-24 right-8 md:right-16 flex items-end gap-1 h-16 opacity-40">
-        <div class="audio-bar h-full" style="animation-delay: 0s;"></div>
-        <div class="audio-bar h-full" style="animation-delay: 0.15s;"></div>
-        <div class="audio-bar h-full" style="animation-delay: 0.3s;"></div>
-        <div class="audio-bar h-full" style="animation-delay: 0.1s;"></div>
-        <div class="audio-bar h-full" style="animation-delay: 0.25s;"></div>
-        <div class="audio-bar h-full" style="animation-delay: 0.05s;"></div>
-        <div class="audio-bar h-full" style="animation-delay: 0.2s;"></div>
+    <div style="position:absolute;top:80px;right:24px;display:flex;align-items:flex-end;gap:3px;height:50px;opacity:0.4;">
+        <div class="audio-bar" style="height:100%;animation-delay:0s;"></div>
+        <div class="audio-bar" style="height:100%;animation-delay:0.15s;"></div>
+        <div class="audio-bar" style="height:100%;animation-delay:0.3s;"></div>
+        <div class="audio-bar" style="height:100%;animation-delay:0.1s;"></div>
+        <div class="audio-bar" style="height:100%;animation-delay:0.25s;"></div>
+        <div class="audio-bar" style="height:100%;animation-delay:0.05s;"></div>
+        <div class="audio-bar" style="height:100%;animation-delay:0.2s;"></div>
     </div>
 
-    <!-- Content -->
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full">
-        <!-- Location tag -->
-        <div class="animate-fade-in-up animate-delay-1 flex items-center gap-2 mb-4">
-            <div class="w-2 h-2 bg-neon rounded-full neon-glow-sm"></div>
-            <span class="text-xs font-geist font-semibold uppercase tracking-[0.2em] text-silver">Wellington, NZ — Serving the Greater Region</span>
+    <div style="position:relative;z-index:10;max-width:1280px;margin:0 auto;padding:0 20px;width:100%;">
+        <div class="anim-fiu anim-d1" style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+            <div style="width:7px;height:7px;background:#FF5F1F;border-radius:50%;box-shadow:0 0 10px rgba(255,95,31,0.5);"></div>
+            <span style="font-size:11px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:#A8A9AD;">Wellington, NZ — Serving the Greater Region</span>
         </div>
 
-        <!-- Main headline -->
-        <h1 class="animate-fade-in-up animate-delay-2 font-heading font-bold text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight leading-[0.92] mb-6">
+        <h1 class="anim-fiu anim-d2 font-heading" style="font-weight:700;font-size:clamp(48px,8vw,96px);line-height:0.92;letter-spacing:-0.04em;margin-bottom:24px;">
             SOUND THAT<br>
-            <span class="neon-text-glow text-neon">MOVES</span><br>
+            <span class="neon-text-glow" style="color:#FF5F1F;">MOVES</span><br>
             PEOPLE
         </h1>
 
-        <!-- Subline -->
-        <p class="animate-fade-in-up animate-delay-3 text-base md:text-lg text-gray-400 max-w-xl mb-8 leading-relaxed">
+        <p class="anim-fiu anim-d3" style="font-size:16px;color:#9ca3af;max-width:520px;line-height:1.6;margin-bottom:32px;">
             Premium audio rental powered by Martin Audio &amp; Pioneer. From warehouse raves to festival stages — we bring the warmth, the power, and the clarity.
         </p>
 
-        <!-- CTA Row -->
-        <div class="animate-fade-in-up animate-delay-4 flex flex-wrap gap-4 items-center">
-            <a href="#booking" class="cta-pulse bg-neon text-black font-heading font-bold text-sm px-8 py-4 rounded-sm inline-flex items-center gap-2 hover:bg-neonLight transition-colors neon-glow">
+        <div class="anim-fiu anim-d4" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;">
+            <a href="#booking" class="cta-pulse" style="background:#FF5F1F;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;padding:16px 32px;border-radius:3px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 0 30px rgba(255,95,31,0.3);" onmouseover="this.style.background='#FF8A4C'" onmouseout="this.style.background='#FF5F1F'">
                 MAKE A BOOKING
-                <iconify-icon icon="lucide:arrow-right" class="text-lg"></iconify-icon>
+                <iconify-icon icon="lucide:arrow-right" style="font-size:18px;"></iconify-icon>
             </a>
-            <a href="#sound" class="border border-white/20 text-white font-heading font-medium text-sm px-8 py-4 rounded-sm inline-flex items-center gap-2 hover:border-neon/50 hover:text-neon transition-all">
+            <a href="#sound" style="border:1px solid rgba(255,255,255,0.2);color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:14px;padding:16px 32px;border-radius:3px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.3s;" onmouseover="this.style.borderColor='rgba(255,95,31,0.5)';this.style.color='#FF5F1F'" onmouseout="this.style.borderColor='rgba(255,255,255,0.2)';this.style.color='#fff'">
                 EXPLORE OUR SOUND
             </a>
         </div>
 
-        <!-- Stats row -->
-        <div class="animate-fade-in-up animate-delay-5 mt-12 md:mt-16 pt-8 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="anim-fiu anim-d5" style="margin-top:48px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.1);display:grid;grid-template-columns:repeat(4,1fr);gap:24px;">
             <div>
-                <div class="font-heading font-bold text-2xl md:text-3xl silver-shimmer">500+</div>
-                <div class="text-xs text-gray-500 uppercase tracking-wider mt-1">Events Powered</div>
+                <div class="font-heading silver-shimmer" style="font-weight:700;font-size:clamp(22px,3vw,30px);">500+</div>
+                <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;">Events Powered</div>
             </div>
             <div>
-                <div class="font-heading font-bold text-2xl md:text-3xl silver-shimmer">Martin</div>
-                <div class="text-xs text-gray-500 uppercase tracking-wider mt-1">Audio Certified</div>
+                <div class="font-heading silver-shimmer" style="font-weight:700;font-size:clamp(22px,3vw,30px);">Martin</div>
+                <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;">Audio Certified</div>
             </div>
             <div>
-                <div class="font-heading font-bold text-2xl md:text-3xl silver-shimmer">24/7</div>
-                <div class="text-xs text-gray-500 uppercase tracking-wider mt-1">Support On-Site</div>
+                <div class="font-heading silver-shimmer" style="font-weight:700;font-size:clamp(22px,3vw,30px);">24/7</div>
+                <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;">Support On-Site</div>
             </div>
             <div>
-                <div class="font-heading font-bold text-2xl md:text-3xl silver-shimmer">WGTN</div>
-                <div class="text-xs text-gray-500 uppercase tracking-wider mt-1">Proudly Local</div>
+                <div class="font-heading silver-shimmer" style="font-weight:700;font-size:clamp(22px,3vw,30px);">WGTN</div>
+                <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;">Proudly Local</div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- NEON DIVIDER -->
 <div class="neon-divider"></div>
 
-<!-- OUR SOUND SECTION -->
-<section id="sound" class="py-16 md:py-24 relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <!-- Section header -->
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+<!-- ==================== OUR SOUND ==================== -->
+<section id="sound" style="padding:64px 0 96px;">
+    <div style="max-width:1280px;margin:0 auto;padding:0 20px;">
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:48px;">
             <div>
-                <span class="text-xs font-geist font-semibold uppercase tracking-[0.2em] text-neon mb-3 block">01 — Our Sound</span>
-                <h2 class="font-heading font-bold text-3xl md:text-5xl tracking-tight leading-tight">
+                <span style="font-size:11px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:#FF5F1F;display:block;margin-bottom:12px;">01 — Our Sound</span>
+                <h2 class="font-heading" style="font-weight:700;font-size:clamp(28px,4vw,48px);line-height:1.05;letter-spacing:-0.03em;">
                     BUILT FOR THE<br>
-                    <span class="text-silver"> MOMENT PEOPLE LOSE IT</span>
+                    <span style="color:#A8A9AD;">MOMENT PEOPLE LOSE IT</span>
                 </h2>
             </div>
-            <p class="text-gray-500 text-sm max-w-sm leading-relaxed">
+            <p style="color:#6b7280;font-size:14px;max-width:340px;line-height:1.6;">
                 We don't do "good enough." Every system is tuned, tested, and deployed with the same rigour as a headline festival stage.
             </p>
         </div>
 
-        <!-- Main content grid -->
-        <div class="grid md:grid-cols-12 gap-4">
+        <div style="display:grid;grid-template-columns:1fr;gap:16px;" class="md:sound-grid">
             <!-- Large image -->
-            <div class="md:col-span-7 relative overflow-hidden rounded-sm group">
-                <img src="https://picsum.photos/seed/speaker-array-pro/900/600.jpg" alt="Speaker array" class="w-full h-64 md:h-full object-cover bw-contrast group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                    <div class="flex items-center gap-2 mb-2">
-                        <iconify-icon icon="lucide:award" class="text-neon"></iconify-icon>
-                        <span class="text-xs font-geist font-bold uppercase tracking-widest text-neon">Martin Audio Partner</span>
+            <div style="position:relative;overflow:hidden;border-radius:4px;" class="sound-main">
+                <img src="https://picsum.photos/seed/pro-speaker-concert-stage/900/600.jpg" alt="Speaker array" class="bw-contrast" style="width:100%;height:340px;object-fit:cover;display:block;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);"></div>
+                <div style="position:absolute;bottom:0;left:0;right:0;padding:24px 28px;">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <iconify-icon icon="lucide:award" style="color:#FF5F1F;"></iconify-icon>
+                        <span style="font-size:10px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:#FF5F1F;">Martin Audio Partner</span>
                     </div>
-                    <h3 class="font-heading font-bold text-xl md:text-2xl mb-2">Blackline X15 + XP118</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed max-w-md">UK-engineered warmth and precision. The Blackline series delivers thunderous low-end and crystal-clear mids — the sound people feel before they hear it.</p>
+                    <h3 class="font-heading" style="font-weight:700;font-size:clamp(18px,2.5vw,24px);margin-bottom:8px;">Blackline X15 + XP118</h3>
+                    <p style="color:#9ca3af;font-size:13px;line-height:1.6;max-width:480px;">UK-engineered warmth and precision. The Blackline series delivers thunderous low-end and crystal-clear mids — the sound people feel before they hear it.</p>
                 </div>
             </div>
 
-            <!-- Right stack -->
-            <div class="md:col-span-5 flex flex-col gap-4">
-                <!-- Card 1 -->
-                <div class="bg-dark-600 border border-white/5 rounded-sm p-6 flex-1 hover:border-neon/20 transition-colors">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 bg-dark-500 rounded-sm flex items-center justify-center">
-                            <iconify-icon icon="lucide:radio-tower" class="text-neon text-lg"></iconify-icon>
+            <!-- Right cards stack -->
+            <div style="display:grid;grid-template-columns:1fr;gap:12px;" class="sound-cards">
+                <div style="background:#171717;border:1px solid rgba(255,255,255,0.05);border-radius:4px;padding:20px;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(255,95,31,0.2)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                        <div style="width:40px;height:40px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                            <iconify-icon icon="lucide:radio-tower" style="color:#FF5F1F;font-size:18px;"></iconify-icon>
                         </div>
-                        <h4 class="font-heading font-semibold text-base">Rave Ready Systems</h4>
+                        <h4 class="font-heading" style="font-weight:600;font-size:15px;">Rave Ready Systems</h4>
                     </div>
-                    <p class="text-gray-500 text-sm leading-relaxed">Every rig is pre-configured for electronic music. Tuned sub arrays, phase-aligned tops, and enough headroom to go all night without breaking a sweat.</p>
+                    <p style="color:#6b7280;font-size:13px;line-height:1.6;">Every rig is pre-configured for electronic music. Tuned sub arrays, phase-aligned tops, and enough headroom to go all night without breaking a sweat.</p>
                 </div>
-
-                <!-- Card 2 -->
-                <div class="bg-dark-600 border border-white/5 rounded-sm p-6 flex-1 hover:border-neon/20 transition-colors">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 bg-dark-500 rounded-sm flex items-center justify-center">
-                            <iconify-icon icon="lucide:disc-3" class="text-neon text-lg"></iconify-icon>
+                <div style="background:#171717;border:1px solid rgba(255,255,255,0.05);border-radius:4px;padding:20px;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(255,95,31,0.2)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                        <div style="width:40px;height:40px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                            <iconify-icon icon="lucide:disc-3" style="color:#FF5F1F;font-size:18px;"></iconify-icon>
                         </div>
-                        <h4 class="font-heading font-semibold text-base">Pioneer & Alpha Theta</h4>
+                        <h4 class="font-heading" style="font-weight:600;font-size:15px;">Pioneer &amp; Alpha Theta</h4>
                     </div>
-                    <p class="text-gray-500 text-sm leading-relaxed">Industry-standard DJ equipment. XDJ-AZ, CDJ-3000, DJM-A9 — the gear that artists expect when they step behind the booth.</p>
+                    <p style="color:#6b7280;font-size:13px;line-height:1.6;">Industry-standard DJ equipment. XDJ-AZ, CDJ-3000, DJM-A9 — the gear that artists expect when they step behind the booth.</p>
                 </div>
-
-                <!-- Card 3 -->
-                <div class="bg-dark-600 border border-white/5 rounded-sm p-6 flex-1 hover:border-neon/20 transition-colors">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 bg-dark-500 rounded-sm flex items-center justify-center">
-                            <iconify-icon icon="lucide:sparkles" class="text-neon text-lg"></iconify-icon>
+                <div style="background:#171717;border:1px solid rgba(255,255,255,0.05);border-radius:4px;padding:20px;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(255,95,31,0.2)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                        <div style="width:40px;height:40px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                            <iconify-icon icon="lucide:sparkles" style="color:#FF5F1F;font-size:18px;"></iconify-icon>
                         </div>
-                        <h4 class="font-heading font-semibold text-base">Festival to Function</h4>
+                        <h4 class="font-heading" style="font-weight:600;font-size:15px;">Festival to Function</h4>
                     </div>
-                    <p class="text-gray-500 text-sm leading-relaxed">From 50-person warehouse sessions to 2000+ outdoor festivals. We scale the sound, not the compromise. Quality UK warmth at every level.</p>
+                    <p style="color:#6b7280;font-size:13px;line-height:1.6;">From 50-person warehouse sessions to 2000+ outdoor festivals. We scale the sound, not the compromise. Quality UK warmth at every level.</p>
                 </div>
             </div>
         </div>
 
-        <!-- Brand logos bar -->
-        <div class="mt-10 pt-8 border-t border-white/5">
-            <div class="flex flex-wrap items-center justify-between gap-6">
-                <span class="text-xs font-geist font-semibold uppercase tracking-[0.15em] text-gray-600">Trusted Brands</span>
-                <div class="flex flex-wrap items-center gap-8 md:gap-12">
-                    <span class="font-heading font-bold text-lg text-gray-500 hover:text-silverLight transition-colors cursor-default">MARTIN AUDIO</span>
-                    <span class="font-heading font-bold text-lg text-gray-500 hover:text-silverLight transition-colors cursor-default">PIONEER DJ</span>
-                    <span class="font-heading font-bold text-lg text-gray-500 hover:text-silverLight transition-colors cursor-default">ALPHA THETA</span>
-                    <span class="font-heading font-bold text-lg text-gray-500 hover:text-silverLight transition-colors cursor-default">TECHNICS</span>
-                    <span class="font-heading font-bold text-lg text-gray-500 hover:text-silverLight transition-colors cursor-default">SHURE</span>
-                </div>
+        <!-- Brand logos -->
+        <div style="margin-top:40px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.05);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px;">
+            <span style="font-size:11px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;color:#3a3a3a;">Trusted Brands</span>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:32px;">
+                <span class="font-heading" style="font-weight:700;font-size:16px;color:#4b5563;transition:color 0.3s;cursor:default;" onmouseover="this.style.color='#C8C9CC'" onmouseout="this.style.color='#4b5563'">MARTIN AUDIO</span>
+                <span class="font-heading" style="font-weight:700;font-size:16px;color:#4b5563;transition:color 0.3s;cursor:default;" onmouseover="this.style.color='#C8C9CC'" onmouseout="this.style.color='#4b5563'">PIONEER DJ</span>
+                <span class="font-heading" style="font-weight:700;font-size:16px;color:#4b5563;transition:color 0.3s;cursor:default;" onmouseover="this.style.color='#C8C9CC'" onmouseout="this.style.color='#4b5563'">ALPHA THETA</span>
+                <span class="font-heading" style="font-weight:700;font-size:16px;color:#4b5563;transition:color 0.3s;cursor:default;" onmouseover="this.style.color='#C8C9CC'" onmouseout="this.style.color='#4b5563'">TECHNICS</span>
+                <span class="font-heading" style="font-weight:700;font-size:16px;color:#4b5563;transition:color 0.3s;cursor:default;" onmouseover="this.style.color='#C8C9CC'" onmouseout="this.style.color='#4b5563'">SHURE</span>
             </div>
         </div>
     </div>
@@ -439,412 +425,388 @@
 
 <div class="neon-divider"></div>
 
-<!-- OUR TEAM SECTION -->
-<section id="team" class="py-16 md:py-24 relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+<!-- ==================== TEAM ==================== -->
+<section id="team" style="padding:64px 0 96px;">
+    <div style="max-width:1280px;margin:0 auto;padding:0 20px;">
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:48px;">
             <div>
-                <span class="text-xs font-geist font-semibold uppercase tracking-[0.2em] text-neon mb-3 block">02 — Our Team</span>
-                <h2 class="font-heading font-bold text-3xl md:text-5xl tracking-tight leading-tight">
+                <span style="font-size:11px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:#FF5F1F;display:block;margin-bottom:12px;">02 — Our Team</span>
+                <h2 class="font-heading" style="font-weight:700;font-size:clamp(28px,4vw,48px);line-height:1.05;letter-spacing:-0.03em;">
                     SOUND NERDS.<br>
-                    <span class="text-silver">PEOPLE PEOPLE.</span>
+                    <span style="color:#A8A9AD;">PEOPLE PEOPLE.</span>
                 </h2>
             </div>
-            <p class="text-gray-500 text-sm max-w-sm leading-relaxed">
+            <p style="color:#6b7280;font-size:14px;max-width:340px;line-height:1.6;">
                 We know how sound shapes a great party. Our crew doesn't just set up gear — they feel the room, read the crowd, and make sure every frequency hits right.
             </p>
         </div>
 
-        <!-- Team grid -->
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;">
             <!-- Person 1 -->
-            <div class="team-card group cursor-default">
-                <div class="relative overflow-hidden rounded-sm mb-4">
-                    <img src="https://picsum.photos/seed/audio-tech-male1/400/500.jpg" alt="Team member" class="team-img w-full h-72 sm:h-80 object-cover object-top bw-contrast transition-all duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-4">
-                        <div class="flex items-center gap-2">
-                            <iconify-icon icon="lucide:headphones" class="text-neon text-sm"></iconify-icon>
-                            <span class="team-role text-xs font-geist font-semibold uppercase tracking-wider text-gray-400 transition-colors duration-300">Lead Engineer</span>
+            <div class="team-card" style="cursor:default;">
+                <div style="position:relative;overflow:hidden;border-radius:4px;margin-bottom:14px;">
+                    <img src="https://picsum.photos/seed/sound-engineer-guy-studio/400/500.jpg" alt="Mitch" class="team-img" style="width:100%;height:280px;object-fit:cover;object-position:top;display:block;">
+                    <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);"></div>
+                    <div style="position:absolute;bottom:0;left:0;right:0;padding:14px;">
+                        <div style="display:flex;align-items:center;gap:6px;">
+                            <iconify-icon icon="lucide:headphones" style="color:#FF5F1F;font-size:13px;"></iconify-icon>
+                            <span class="team-role" style="font-size:10px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#9ca3af;">Lead Engineer</span>
                         </div>
                     </div>
                 </div>
-                <h4 class="font-heading font-bold text-base">Mitch Kereama</h4>
-                <p class="text-gray-500 text-xs mt-1">12 years live sound. Martin Audio specialist. The guy who tunes rooms by feel.</p>
+                <h4 class="font-heading" style="font-weight:700;font-size:15px;">Mitch Kereama</h4>
+                <p style="color:#6b7280;font-size:12px;margin-top:4px;line-height:1.5;">12 years live sound. Martin Audio specialist. The guy who tunes rooms by feel.</p>
             </div>
 
             <!-- Person 2 -->
-            <div class="team-card group cursor-default">
-                <div class="relative overflow-hidden rounded-sm mb-4">
-                    <img src="https://picsum.photos/seed/audio-tech-female1/400/500.jpg" alt="Team member" class="team-img w-full h-72 sm:h-80 object-cover object-top bw-contrast transition-all duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-4">
-                        <div class="flex items-center gap-2">
-                            <iconify-icon icon="lucide:music" class="text-neon text-sm"></iconify-icon>
-                            <span class="team-role text-xs font-geist font-semibold uppercase tracking-wider text-gray-400 transition-colors duration-300">DJ & Booking Lead</span>
+            <div class="team-card" style="cursor:default;">
+                <div style="position:relative;overflow:hidden;border-radius:4px;margin-bottom:14px;">
+                    <img src="https://picsum.photos/seed/dj-woman-turntable-dark/400/500.jpg" alt="Sana" class="team-img" style="width:100%;height:280px;object-fit:cover;object-position:top;display:block;">
+                    <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);"></div>
+                    <div style="position:absolute;bottom:0;left:0;right:0;padding:14px;">
+                        <div style="display:flex;align-items:center;gap:6px;">
+                            <iconify-icon icon="lucide:music" style="color:#FF5F1F;font-size:13px;"></iconify-icon>
+                            <span class="team-role" style="font-size:10px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#9ca3af;">DJ &amp; Booking Lead</span>
                         </div>
                     </div>
                 </div>
-                <h4 class="font-heading font-bold text-base">Sana Tui</h4>
-                <p class="text-gray-500 text-xs mt-1">Wellington's underground scene staple. Knows every venue, every promoter, every vibe.</p>
+                <h4 class="font-heading" style="font-weight:700;font-size:15px;">Sana Tui</h4>
+                <p style="color:#6b7280;font-size:12px;margin-top:4px;line-height:1.5;">Wellington underground scene staple. Knows every venue, every promoter, every vibe.</p>
             </div>
 
             <!-- Person 3 -->
-            <div class="team-card group cursor-default">
-                <div class="relative overflow-hidden rounded-sm mb-4">
-                    <img src="https://picsum.photos/seed/audio-tech-male2/400/500.jpg" alt="Team member" class="team-img w-full h-72 sm:h-80 object-cover object-top bw-contrast transition-all duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-4">
-                        <div class="flex items-center gap-2">
-                            <iconify-icon icon="lucide:settings-2" class="text-neon text-sm"></iconify-icon>
-                            <span class="team-role text-xs font-geist font-semibold uppercase tracking-wider text-gray-400 transition-colors duration-300">Equipment Manager</span>
+            <div class="team-card" style="cursor:default;">
+                <div style="position:relative;overflow-hidden;border-radius:4px;margin-bottom:14px;">
+                    <img src="https://picsum.photos/seed/audio-tech-workshop-gear/400/500.jpg" alt="Daniel" class="team-img" style="width:100%;height:280px;object-fit:cover;object-position:top;display:block;">
+                    <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);"></div>
+                    <div style="position:absolute;bottom:0;left:0;right:0;padding:14px;">
+                        <div style="display:flex;align-items:center;gap:6px;">
+                            <iconify-icon icon="lucide:settings-2" style="color:#FF5F1F;font-size:13px;"></iconify-icon>
+                            <span class="team-role" style="font-size:10px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#9ca3af;">Equipment Manager</span>
                         </div>
                     </div>
                 </div>
-                <h4 class="font-heading font-bold text-base">Daniel Chen</h4>
-                <p class="text-gray-500 text-xs mt-1">If it's got a circuit board, Dan's fixed it. Keeps every piece of gear in concert-ready condition.</p>
+                <h4 class="font-heading" style="font-weight:700;font-size:15px;">Daniel Chen</h4>
+                <p style="color:#6b7280;font-size:12px;margin-top:4px;line-height:1.5;">If it's got a circuit board, Dan's fixed it. Keeps every piece of gear in concert-ready condition.</p>
             </div>
 
             <!-- Person 4 -->
-            <div class="team-card group cursor-default">
-                <div class="relative overflow-hidden rounded-sm mb-4">
-                    <img src="https://picsum.photos/seed/audio-tech-female2/400/500.jpg" alt="Team member" class="team-img w-full h-72 sm:h-80 object-cover object-top bw-contrast transition-all duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-4">
-                        <div class="flex items-center gap-2">
-                            <iconify-icon icon="lucide:truck" class="text-neon text-sm"></iconify-icon>
-                            <span class="team-role text-xs font-geist font-semibold uppercase tracking-wider text-gray-400 transition-colors duration-300">Logistics & Events</span>
+            <div class="team-card" style="cursor:default;">
+                <div style="position:relative;overflow:hidden;border-radius:4px;margin-bottom:14px;">
+                    <img src="https://picsum.photos/seed/event-logistics-woman-outdoor/400/500.jpg" alt="Ava" class="team-img" style="width:100%;height:280px;object-fit:cover;object-position:top;display:block;">
+                    <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);"></div>
+                    <div style="position:absolute;bottom:0;left:0;right:0;padding:14px;">
+                        <div style="display:flex;align-items:center;gap:6px;">
+                            <iconify-icon icon="lucide:truck" style="color:#FF5F1F;font-size:13px;"></iconify-icon>
+                            <span class="team-role" style="font-size:10px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#9ca3af;">Logistics &amp; Events</span>
                         </div>
                     </div>
                 </div>
-                <h4 class="font-heading font-bold text-base">Ava Williams</h4>
-                <p class="text-gray-500 text-xs mt-1">Makes the impossible logistics look easy. Wellington, Hutt Valley, Kapiti — she's got it covered.</p>
+                <h4 class="font-heading" style="font-weight:700;font-size:15px;">Ava Williams</h4>
+                <p style="color:#6b7280;font-size:12px;margin-top:4px;line-height:1.5;">Makes impossible logistics look easy. Wellington, Hutt Valley, Kapiti — she's got it covered.</p>
             </div>
         </div>
 
-        <!-- Team ethos strip -->
-        <div class="mt-10 bg-dark-700 border border-white/5 rounded-sm p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center gap-6">
-            <iconify-icon icon="lucide:quote" class="text-neon text-2xl shrink-0"></iconify-icon>
-            <p class="text-gray-300 text-sm md:text-base leading-relaxed italic font-light">
+        <!-- Quote -->
+        <div style="margin-top:40px;background:#171717;border:1px solid rgba(255,255,255,0.05);border-radius:4px;padding:28px 32px;display:flex;flex-wrap:wrap;align-items:center;gap:20px;">
+            <iconify-icon icon="lucide:quote" style="color:#FF5F1F;font-size:24px;flex-shrink:0;"></iconify-icon>
+            <p style="color:#d1d5db;font-size:14px;line-height:1.7;font-style:italic;font-weight:300;flex:1;min-width:240px;">
                 "A bad sound system can ruin the best lineup. We've seen it happen. That's why we exist — to make sure the sound is the last thing anyone worries about. We're not just renting speakers, we're protecting the experience."
             </p>
-            <span class="text-xs text-neon font-geist font-semibold uppercase tracking-wider shrink-0 whitespace-nowrap">— The Team</span>
+            <span style="font-size:11px;color:#FF5F1F;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;flex-shrink:0;white-space:nowrap;">— The Team</span>
         </div>
     </div>
 </section>
 
 <div class="neon-divider"></div>
 
-<!-- EQUIPMENT SECTION -->
-<section id="equipment" class="py-16 md:py-24 relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+<!-- ==================== EQUIPMENT ==================== -->
+<section id="equipment" style="padding:64px 0 96px;">
+    <div style="max-width:1280px;margin:0 auto;padding:0 20px;">
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:48px;">
             <div>
-                <span class="text-xs font-geist font-semibold uppercase tracking-[0.2em] text-neon mb-3 block">03 — Equipment</span>
-                <h2 class="font-heading font-bold text-3xl md:text-5xl tracking-tight leading-tight">
+                <span style="font-size:11px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:#FF5F1F;display:block;margin-bottom:12px;">03 — Equipment</span>
+                <h2 class="font-heading" style="font-weight:700;font-size:clamp(28px,4vw,48px);line-height:1.05;letter-spacing:-0.03em;">
                     THE GEAR.<br>
-                    <span class="text-silver">NO SHORTCUTS.</span>
+                    <span style="color:#A8A9AD;">NO SHORTCUTS.</span>
                 </h2>
             </div>
-            <a href="#booking" class="text-neon text-sm font-heading font-medium flex items-center gap-2 hover:gap-3 transition-all">
+            <a href="#booking" style="color:#FF5F1F;font-size:14px;font-family:'Space Grotesk',sans-serif;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:8px;transition:gap 0.3s;" onmouseover="this.style.gap='14px'" onmouseout="this.style.gap='8px'">
                 REQUEST FULL RIDER
                 <iconify-icon icon="lucide:arrow-right"></iconify-icon>
             </a>
         </div>
 
-        <!-- Equipment Grid -->
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-
-            <!-- Speaker Systems -->
-            <div class="equip-card bg-dark-700 rounded-sm p-5">
-                <div class="flex items-start justify-between mb-4">
-                    <div class="equip-icon w-11 h-11 bg-dark-500 rounded-sm flex items-center justify-center transition-all duration-300">
-                        <iconify-icon icon="lucide:speaker" class="text-silver text-xl transition-colors duration-300"></iconify-icon>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;">
+            <!-- X15 -->
+            <div class="equip-card">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+                    <div class="eq-icon" style="width:42px;height:42px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                        <iconify-icon icon="lucide:speaker" style="font-size:20px;"></iconify-icon>
                     </div>
-                    <span class="text-[10px] font-geist font-bold uppercase tracking-widest text-gray-600 bg-dark-500 px-2 py-1 rounded">PA System</span>
+                    <span style="font-size:9px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#3a3a3a;background:#1E1E1E;padding:4px 8px;border-radius:3px;">PA System</span>
                 </div>
-                <h4 class="equip-name font-heading font-bold text-base mb-1 transition-colors duration-300">Martin Audio Blackline X15</h4>
-                <p class="text-gray-500 text-xs leading-relaxed mb-3">15" two-way passive. UK warmth. The workhorse of our PA inventory. Available in stacks of 2, 4, or 8.</p>
-                <div class="flex items-center gap-3 text-[10px] font-geist uppercase tracking-wider text-gray-600">
-                    <span>15" LF</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
-                    <span>1.4" HF</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
+                <h4 class="eq-name font-heading" style="font-weight:700;font-size:15px;margin-bottom:6px;">Martin Audio Blackline X15</h4>
+                <p style="color:#6b7280;font-size:12px;line-height:1.6;margin-bottom:12px;">15" two-way passive. UK warmth. The workhorse of our PA inventory. Available in stacks of 2, 4, or 8.</p>
+                <div style="display:flex;align-items:center;gap:10px;font-size:10px;font-family:'Geist',sans-serif;text-transform:uppercase;letter-spacing:0.08em;color:#3a3a3a;">
+                    <span>15" LF</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
+                    <span>1.4" HF</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
                     <span>Passive</span>
                 </div>
             </div>
 
-            <!-- Subs -->
-            <div class="equip-card bg-dark-700 rounded-sm p-5">
-                <div class="flex items-start justify-between mb-4">
-                    <div class="equip-icon w-11 h-11 bg-dark-500 rounded-sm flex items-center justify-center transition-all duration-300">
-                        <iconify-icon icon="lucide:waves" class="text-silver text-xl transition-colors duration-300"></iconify-icon>
+            <!-- XP118 -->
+            <div class="equip-card">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+                    <div class="eq-icon" style="width:42px;height:42px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                        <iconify-icon icon="lucide:waves" style="font-size:20px;"></iconify-icon>
                     </div>
-                    <span class="text-[10px] font-geist font-bold uppercase tracking-widest text-gray-600 bg-dark-500 px-2 py-1 rounded">Subwoofer</span>
+                    <span style="font-size:9px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#3a3a3a;background:#1E1E1E;padding:4px 8px;border-radius:3px;">Subwoofer</span>
                 </div>
-                <h4 class="equip-name font-heading font-bold text-base mb-1 transition-colors duration-300">Martin Audio XP118</h4>
-                <p class="text-gray-500 text-xs leading-relaxed mb-3">18" direct-radiating sub. The kind of low-end that rattles your chest. Cardioid arrays available for outdoor events.</p>
-                <div class="flex items-center gap-3 text-[10px] font-geist uppercase tracking-wider text-gray-600">
-                    <span>18" LF</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
-                    <span>Cardioid Ready</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
+                <h4 class="eq-name font-heading" style="font-weight:700;font-size:15px;margin-bottom:6px;">Martin Audio XP118</h4>
+                <p style="color:#6b7280;font-size:12px;line-height:1.6;margin-bottom:12px;">18" direct-radiating sub. The kind of low-end that rattles your chest. Cardioid arrays available for outdoor events.</p>
+                <div style="display:flex;align-items:center;gap:10px;font-size:10px;font-family:'Geist',sans-serif;text-transform:uppercase;letter-spacing:0.08em;color:#3a3a3a;">
+                    <span>18" LF</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
+                    <span>Cardioid</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
                     <span>Passive</span>
                 </div>
             </div>
 
             <!-- XDJ-AZ -->
-            <div class="equip-card bg-dark-700 rounded-sm p-5">
-                <div class="flex items-start justify-between mb-4">
-                    <div class="equip-icon w-11 h-11 bg-dark-500 rounded-sm flex items-center justify-center transition-all duration-300">
-                        <iconify-icon icon="lucide:disc-3" class="text-silver text-xl transition-colors duration-300"></iconify-icon>
+            <div class="equip-card">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+                    <div class="eq-icon" style="width:42px;height:42px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                        <iconify-icon icon="lucide:disc-3" style="font-size:20px;"></iconify-icon>
                     </div>
-                    <span class="text-[10px] font-geist font-bold uppercase tracking-widest text-neon bg-neon/10 px-2 py-1 rounded">Popular</span>
+                    <span style="font-size:9px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#FF5F1F;background:rgba(255,95,31,0.1);padding:4px 8px;border-radius:3px;">Popular</span>
                 </div>
-                <h4 class="equip-name font-heading font-bold text-base mb-1 transition-colors duration-300">Pioneer XDJ-AZ</h4>
-                <p class="text-gray-500 text-xs leading-relaxed mb-3">All-in-one standalone player. 10.1" touchscreen, 4-deck, rekordbox/Engine DJ compatible. The new standard.</p>
-                <div class="flex items-center gap-3 text-[10px] font-geist uppercase tracking-wider text-gray-600">
-                    <span>4-Deck</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
-                    <span>Standalone</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
-                    <span>10.1" Screen</span>
+                <h4 class="eq-name font-heading" style="font-weight:700;font-size:15px;margin-bottom:6px;">Pioneer XDJ-AZ</h4>
+                <p style="color:#6b7280;font-size:12px;line-height:1.6;margin-bottom:12px;">All-in-one standalone player. 10.1" touchscreen, 4-deck, rekordbox/Engine DJ compatible. The new standard.</p>
+                <div style="display:flex;align-items:center;gap:10px;font-size:10px;font-family:'Geist',sans-serif;text-transform:uppercase;letter-spacing:0.08em;color:#3a3a3a;">
+                    <span>4-Deck</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
+                    <span>Standalone</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
+                    <span>10.1"</span>
                 </div>
             </div>
 
             <!-- CDJ-3000 -->
-            <div class="equip-card bg-dark-700 rounded-sm p-5">
-                <div class="flex items-start justify-between mb-4">
-                    <div class="equip-icon w-11 h-11 bg-dark-500 rounded-sm flex items-center justify-center transition-all duration-300">
-                        <iconify-icon icon="lucide:disc" class="text-silver text-xl transition-colors duration-300"></iconify-icon>
+            <div class="equip-card">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+                    <div class="eq-icon" style="width:42px;height:42px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                        <iconify-icon icon="lucide:disc" style="font-size:20px;"></iconify-icon>
                     </div>
-                    <span class="text-[10px] font-geist font-bold uppercase tracking-widest text-gray-600 bg-dark-500 px-2 py-1 rounded">Player</span>
+                    <span style="font-size:9px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#3a3a3a;background:#1E1E1E;padding:4px 8px;border-radius:3px;">Player</span>
                 </div>
-                <h4 class="equip-name font-heading font-bold text-base mb-1 transition-colors duration-300">Pioneer CDJ-3000</h4>
-                <p class="text-gray-500 text-xs leading-relaxed mb-3">Club-standard multi-player. 9" touchscreen, 96kHz/24-bit audio, Pro DJ Link. Paired units available.</p>
-                <div class="flex items-center gap-3 text-[10px] font-geist uppercase tracking-wider text-gray-600">
-                    <span>9" Screen</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
-                    <span>96kHz</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
+                <h4 class="eq-name font-heading" style="font-weight:700;font-size:15px;margin-bottom:6px;">Pioneer CDJ-3000</h4>
+                <p style="color:#6b7280;font-size:12px;line-height:1.6;margin-bottom:12px;">Club-standard multi-player. 9" touchscreen, 96kHz/24-bit audio, Pro DJ Link. Paired units available.</p>
+                <div style="display:flex;align-items:center;gap:10px;font-size:10px;font-family:'Geist',sans-serif;text-transform:uppercase;letter-spacing:0.08em;color:#3a3a3a;">
+                    <span>9" Screen</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
+                    <span>96kHz</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
                     <span>Pro DJ Link</span>
                 </div>
             </div>
 
             <!-- DJM-A9 -->
-            <div class="equip-card bg-dark-700 rounded-sm p-5">
-                <div class="flex items-start justify-between mb-4">
-                    <div class="equip-icon w-11 h-11 bg-dark-500 rounded-sm flex items-center justify-center transition-all duration-300">
-                        <iconify-icon icon="lucide:sliders-horizontal" class="text-silver text-xl transition-colors duration-300"></iconify-icon>
+            <div class="equip-card">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+                    <div class="eq-icon" style="width:42px;height:42px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                        <iconify-icon icon="lucide:sliders-horizontal" style="font-size:20px;"></iconify-icon>
                     </div>
-                    <span class="text-[10px] font-geist font-bold uppercase tracking-widest text-gray-600 bg-dark-500 px-2 py-1 rounded">Mixer</span>
+                    <span style="font-size:9px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#3a3a3a;background:#1E1E1E;padding:4px 8px;border-radius:3px;">Mixer</span>
                 </div>
-                <h4 class="equip-name font-heading font-bold text-base mb-1 transition-colors duration-300">Pioneer DJM-A9</h4>
-                <p class="text-gray-500 text-xs leading-relaxed mb-3">Flagship 4-channel mixer. Evolved Magenta faders, 64-bit float processing, 4-band EQ per channel.</p>
-                <div class="flex items-center gap-3 text-[10px] font-geist uppercase tracking-wider text-gray-600">
-                    <span>4-Ch</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
-                    <span>64-bit Float</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
-                    <span>Magenta Fader</span>
+                <h4 class="eq-name font-heading" style="font-weight:700;font-size:15px;margin-bottom:6px;">Pioneer DJM-A9</h4>
+                <p style="color:#6b7280;font-size:12px;line-height:1.6;margin-bottom:12px;">Flagship 4-channel mixer. Evolved Magenta faders, 64-bit float processing, 4-band EQ per channel.</p>
+                <div style="display:flex;align-items:center;gap:10px;font-size:10px;font-family:'Geist',sans-serif;text-transform:uppercase;letter-spacing:0.08em;color:#3a3a3a;">
+                    <span>4-Ch</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
+                    <span>64-bit</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
+                    <span>Magenta</span>
                 </div>
             </div>
 
             <!-- Technics -->
-            <div class="equip-card bg-dark-700 rounded-sm p-5">
-                <div class="flex items-start justify-between mb-4">
-                    <div class="equip-icon w-11 h-11 bg-dark-500 rounded-sm flex items-center justify-center transition-all duration-300">
-                        <iconify-icon icon="lucide:rotate-cw" class="text-silver text-xl transition-colors duration-300"></iconify-icon>
+            <div class="equip-card">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+                    <div class="eq-icon" style="width:42px;height:42px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                        <iconify-icon icon="lucide:rotate-cw" style="font-size:20px;"></iconify-icon>
                     </div>
-                    <span class="text-[10px] font-geist font-bold uppercase tracking-widest text-gray-600 bg-dark-500 px-2 py-1 rounded">Turntable</span>
+                    <span style="font-size:9px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#3a3a3a;background:#1E1E1E;padding:4px 8px;border-radius:3px;">Turntable</span>
                 </div>
-                <h4 class="equip-name font-heading font-bold text-base mb-1 transition-colors duration-300">Technics SL-1210MK2</h4>
-                <p class="text-gray-500 text-xs leading-relaxed mb-3">The legend. Direct drive, pitch control, S-shaped tonearm. For the vinyl purists and hip-hop heads.</p>
-                <div class="flex items-center gap-3 text-[10px] font-geist uppercase tracking-wider text-gray-600">
-                    <span>Direct Drive</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
-                    <span>Vinyl</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
+                <h4 class="eq-name font-heading" style="font-weight:700;font-size:15px;margin-bottom:6px;">Technics SL-1210MK2</h4>
+                <p style="color:#6b7280;font-size:12px;line-height:1.6;margin-bottom:12px;">The legend. Direct drive, pitch control, S-shaped tonearm. For vinyl purists and hip-hop heads.</p>
+                <div style="display:flex;align-items:center;gap:10px;font-size:10px;font-family:'Geist',sans-serif;text-transform:uppercase;letter-spacing:0.08em;color:#3a3a3a;">
+                    <span>Direct Drive</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
+                    <span>Vinyl</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
                     <span>±8% Pitch</span>
                 </div>
             </div>
 
-            <!-- Shure Wireless -->
-            <div class="equip-card bg-dark-700 rounded-sm p-5">
-                <div class="flex items-start justify-between mb-4">
-                    <div class="equip-icon w-11 h-11 bg-dark-500 rounded-sm flex items-center justify-center transition-all duration-300">
-                        <iconify-icon icon="lucide:mic" class="text-silver text-xl transition-colors duration-300"></iconify-icon>
+            <!-- Shure -->
+            <div class="equip-card">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+                    <div class="eq-icon" style="width:42px;height:42px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                        <iconify-icon icon="lucide:mic" style="font-size:20px;"></iconify-icon>
                     </div>
-                    <span class="text-[10px] font-geist font-bold uppercase tracking-widest text-gray-600 bg-dark-500 px-2 py-1 rounded">Wireless</span>
+                    <span style="font-size:9px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#3a3a3a;background:#1E1E1E;padding:4px 8px;border-radius:3px;">Wireless</span>
                 </div>
-                <h4 class="equip-name font-heading font-bold text-base mb-1 transition-colors duration-300">Shure Wireless Systems</h4>
-                <p class="text-gray-500 text-xs leading-relaxed mb-3">QLXD24/SM58 handheld &amp; bodypack systems. Rock-solid UHF, no dropouts. For MCs, hosts, and toasts.</p>
-                <div class="flex items-center gap-3 text-[10px] font-geist uppercase tracking-wider text-gray-600">
-                    <span>UHF</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
-                    <span>SM58 Capsule</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
+                <h4 class="eq-name font-heading" style="font-weight:700;font-size:15px;margin-bottom:6px;">Shure Wireless Systems</h4>
+                <p style="color:#6b7280;font-size:12px;line-height:1.6;margin-bottom:12px;">QLXD24/SM58 handheld &amp; bodypack. Rock-solid UHF, zero dropouts. For MCs, hosts, and toasts.</p>
+                <div style="display:flex;align-items:center;gap:10px;font-size:10px;font-family:'Geist',sans-serif;text-transform:uppercase;letter-spacing:0.08em;color:#3a3a3a;">
+                    <span>UHF</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
+                    <span>SM58</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
                     <span>Dual Ch</span>
                 </div>
             </div>
 
             <!-- Alpha Theta -->
-            <div class="equip-card bg-dark-700 rounded-sm p-5">
-                <div class="flex items-start justify-between mb-4">
-                    <div class="equip-icon w-11 h-11 bg-dark-500 rounded-sm flex items-center justify-center transition-all duration-300">
-                        <iconify-icon icon="lucide:cpu" class="text-silver text-xl transition-colors duration-300"></iconify-icon>
+            <div class="equip-card">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+                    <div class="eq-icon" style="width:42px;height:42px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                        <iconify-icon icon="lucide:cpu" style="font-size:20px;"></iconify-icon>
                     </div>
-                    <span class="text-[10px] font-geist font-bold uppercase tracking-widest text-gray-600 bg-dark-500 px-2 py-1 rounded">Controller</span>
+                    <span style="font-size:9px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#3a3a3a;background:#1E1E1E;padding:4px 8px;border-radius:3px;">Controller</span>
                 </div>
-                <h4 class="equip-name font-heading font-bold text-base mb-1 transition-colors duration-300">Alpha Theta Equipment</h4>
-                <p class="text-gray-500 text-xs leading-relaxed mb-3">Next-gen Alpha Theta controllers and processors. Cutting-edge sound quality with deep rekordbox integration.</p>
-                <div class="flex items-center gap-3 text-[10px] font-geist uppercase tracking-wider text-gray-600">
-                    <span>Standalone</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
-                    <span>rekordbox</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
+                <h4 class="eq-name font-heading" style="font-weight:700;font-size:15px;margin-bottom:6px;">Alpha Theta Equipment</h4>
+                <p style="color:#6b7280;font-size:12px;line-height:1.6;margin-bottom:12px;">Next-gen controllers and processors. Cutting-edge sound quality with deep rekordbox integration.</p>
+                <div style="display:flex;align-items:center;gap:10px;font-size:10px;font-family:'Geist',sans-serif;text-transform:uppercase;letter-spacing:0.08em;color:#3a3a3a;">
+                    <span>Standalone</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
+                    <span>rekordbox</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
                     <span>Hi-Res</span>
                 </div>
             </div>
 
-            <!-- Amps & Processing -->
-            <div class="equip-card bg-dark-700 rounded-sm p-5">
-                <div class="flex items-start justify-between mb-4">
-                    <div class="equip-icon w-11 h-11 bg-dark-500 rounded-sm flex items-center justify-center transition-all duration-300">
-                        <iconify-icon icon="lucide:zap" class="text-silver text-xl transition-colors duration-300"></iconify-icon>
+            <!-- Amps -->
+            <div class="equip-card">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+                    <div class="eq-icon" style="width:42px;height:42px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                        <iconify-icon icon="lucide:zap" style="font-size:20px;"></iconify-icon>
                     </div>
-                    <span class="text-[10px] font-geist font-bold uppercase tracking-widest text-gray-600 bg-dark-500 px-2 py-1 rounded">Amplification</span>
+                    <span style="font-size:9px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#3a3a3a;background:#1E1E1E;padding:4px 8px;border-radius:3px;">Amplification</span>
                 </div>
-                <h4 class="equip-name font-heading font-bold text-base mb-1 transition-colors duration-300">Amps & DSP Processing</h4>
-                <p class="text-gray-500 text-xs leading-relaxed mb-3">Lab Gruppen, Powersoft, and Martin Audio iKON amplifiers with full DSP presets for every cabinet in our fleet.</p>
-                <div class="flex items-center gap-3 text-[10px] font-geist uppercase tracking-wider text-gray-600">
-                    <span>DSP</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
-                    <span>Powersoft</span>
-                    <span class="w-1 h-1 bg-gray-700 rounded-full"></span>
+                <h4 class="eq-name font-heading" style="font-weight:700;font-size:15px;margin-bottom:6px;">Amps &amp; DSP Processing</h4>
+                <p style="color:#6b7280;font-size:12px;line-height:1.6;margin-bottom:12px;">Lab Gruppen, Powersoft, Martin Audio iKON amplifiers with full DSP presets for every cabinet.</p>
+                <div style="display:flex;align-items:center;gap:10px;font-size:10px;font-family:'Geist',sans-serif;text-transform:uppercase;letter-spacing:0.08em;color:#3a3a3a;">
+                    <span>DSP</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
+                    <span>Powersoft</span><span style="width:4px;height:4px;background:#2a2a2a;border-radius:50%;display:inline-block;"></span>
                     <span>Lab Gruppen</span>
                 </div>
             </div>
-
         </div>
 
-        <!-- Equipment note -->
-        <div class="mt-8 flex items-start gap-3 bg-neon/5 border border-neon/10 rounded-sm p-4">
-            <iconify-icon icon="lucide:info" class="text-neon mt-0.5 shrink-0"></iconify-icon>
-            <p class="text-gray-400 text-xs leading-relaxed">All equipment is PAT tested, serviced, and quality-checked before every deployment. Full technical rider available on request — <a href="#booking" class="text-neon hover:underline">get in touch</a> for custom configurations.</p>
+        <div style="margin-top:32px;display:flex;align-items:flex-start;gap:12px;background:rgba(255,95,31,0.04);border:1px solid rgba(255,95,31,0.1);border-radius:4px;padding:16px 20px;">
+            <iconify-icon icon="lucide:info" style="color:#FF5F1F;flex-shrink:0;margin-top:2px;"></iconify-icon>
+            <p style="color:#9ca3af;font-size:12px;line-height:1.6;">All equipment is PAT tested, serviced, and quality-checked before every deployment. Full technical rider available on request — <a href="#booking" style="color:#FF5F1F;text-decoration:underline;">get in touch</a> for custom configurations.</p>
         </div>
     </div>
 </section>
 
 <div class="neon-divider"></div>
 
-<!-- EVENT STORIES SECTION -->
-<section id="stories" class="py-16 md:py-24 relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+<!-- ==================== STORIES ==================== -->
+<section id="stories" style="padding:64px 0 96px;">
+    <div style="max-width:1280px;margin:0 auto;padding:0 20px;">
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:48px;">
             <div>
-                <span class="text-xs font-geist font-semibold uppercase tracking-[0.2em] text-neon mb-3 block">04 — Stories</span>
-                <h2 class="font-heading font-bold text-3xl md:text-5xl tracking-tight leading-tight">
+                <span style="font-size:11px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:#FF5F1F;display:block;margin-bottom:12px;">04 — Stories</span>
+                <h2 class="font-heading" style="font-weight:700;font-size:clamp(28px,4vw,48px);line-height:1.05;letter-spacing:-0.03em;">
                     REAL EVENTS.<br>
-                    <span class="text-silver">REAL ENERGY.</span>
+                    <span style="color:#A8A9AD;">REAL ENERGY.</span>
                 </h2>
             </div>
-            <p class="text-gray-500 text-sm max-w-sm leading-relaxed">
+            <p style="color:#6b7280;font-size:14px;max-width:340px;line-height:1.6;">
                 Every event has a story. Here are some of the nights that remind us why we do this.
             </p>
         </div>
 
-        <!-- Stories grid -->
-        <div class="grid md:grid-cols-3 gap-4">
-
-            <!-- Story 1 - Featured -->
-            <div class="story-card md:col-span-2 md:row-span-2 relative overflow-hidden rounded-sm cursor-default group">
-                <img src="https://picsum.photos/seed/warehouse-party-dark/900/700.jpg" alt="Warehouse rave" class="story-img w-full h-64 md:h-full object-cover bw-contrast transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
-                <div class="story-overlay absolute inset-0 bg-neon/5 opacity-0 transition-opacity duration-500"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="bg-neon text-black text-[10px] font-geist font-bold uppercase tracking-widest px-2.5 py-1 rounded">Featured</span>
-                        <span class="text-xs text-gray-400">Dec 2024</span>
-                        <span class="text-xs text-gray-600">•</span>
-                        <span class="text-xs text-gray-400">Wellington CBD</span>
+        <!-- Main stories grid -->
+        <div style="display:grid;grid-template-columns:1fr;gap:12px;" class="stories-grid">
+            <!-- Featured story -->
+            <div class="story-card" style="position:relative;overflow:hidden;border-radius:4px;cursor:default;">
+                <img src="https://picsum.photos/seed/warehouse-rave-dark-lasers/900/700.jpg" alt="Warehouse rave" class="story-img bw-contrast" style="width:100%;height:320px;object-fit:cover;display:block;">
+                <div style="position:absolute;inset:0;background:linear-gradient(to top, #000 0%, rgba(0,0,0,0.5) 40%, transparent 100%);"></div>
+                <div class="story-overlay" style="position:absolute;inset:0;background:rgba(255,95,31,0.04);"></div>
+                <div style="position:absolute;bottom:0;left:0;right:0;padding:24px 28px;">
+                    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px;">
+                        <span style="background:#FF5F1F;color:#000;font-size:9px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;padding:3px 10px;border-radius:3px;">Featured</span>
+                        <span style="font-size:12px;color:#9ca3af;">Dec 2024</span>
+                        <span style="font-size:12px;color:#3a3a3a;">•</span>
+                        <span style="font-size:12px;color:#9ca3af;">Wellington CBD</span>
                     </div>
-                    <h3 class="font-heading font-bold text-xl md:text-3xl mb-2 leading-tight">"DEPTHS" — 800 Capacity Warehouse Rave</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed max-w-lg mb-4">3 rooms. 6 Blackline X15 tops. 8 XP118 subs in cardioid. The bass was so clean you could feel every kick drum in your spine. Three international acts, zero sound issues, sunrise session that nobody wanted to end.</p>
-                    <div class="flex items-center gap-4 text-xs text-gray-500">
-                        <span class="flex items-center gap-1.5"><iconify-icon icon="lucide:users" class="text-neon"></iconify-icon> 800 pax</span>
-                        <span class="flex items-center gap-1.5"><iconify-icon icon="lucide:speaker" class="text-neon"></iconify-icon> 14-piece PA</span>
-                        <span class="flex items-center gap-1.5"><iconify-icon icon="lucide:clock" class="text-neon"></iconify-icon> 12hr set</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Story 2 -->
-            <div class="story-card relative overflow-hidden rounded-sm cursor-default group">
-                <img src="https://picsum.photos/seed/outdoor-festival-nz/500/400.jpg" alt="Outdoor festival" class="story-img w-full h-56 md:h-full object-cover bw-contrast transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-                <div class="story-overlay absolute inset-0 bg-neon/5 opacity-0 transition-opacity duration-500"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-5">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="text-xs text-gray-400">Mar 2024</span>
-                        <span class="text-xs text-gray-600">•</span>
-                        <span class="text-xs text-gray-400">Hutt Valley</span>
-                    </div>
-                    <h4 class="font-heading font-bold text-base mb-1">Summer Sessions — Outdoor Festival</h4>
-                    <p class="text-gray-500 text-xs leading-relaxed">2000+ crowd, outdoor stage, full Martin Audio line array. Ran for 14 hours in variable weather. Not a single dropout.</p>
-                    <div class="flex items-center gap-3 text-xs text-gray-600 mt-2">
-                        <span class="flex items-center gap-1"><iconify-icon icon="lucide:users" class="text-neon text-[10px]"></iconify-icon> 2000+</span>
-                        <span class="flex items-center gap-1"><iconify-icon icon="lucide:sun" class="text-neon text-[10px]"></iconify-icon> Outdoor</span>
+                    <h3 class="font-heading" style="font-weight:700;font-size:clamp(18px,2.5vw,28px);margin-bottom:8px;line-height:1.2;">"DEPTHS" — 800 Capacity Warehouse Rave</h3>
+                    <p style="color:#9ca3af;font-size:13px;line-height:1.6;max-width:520px;margin-bottom:12px;">3 rooms. 6 Blackline X15 tops. 8 XP118 subs in cardioid. The bass was so clean you could feel every kick drum in your spine. Three international acts, zero sound issues, sunrise session that nobody wanted to end.</p>
+                    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px;font-size:12px;color:#6b7280;">
+                        <span style="display:flex;align-items:center;gap:5px;"><iconify-icon icon="lucide:users" style="color:#FF5F1F;font-size:14px;"></iconify-icon> 800 pax</span>
+                        <span style="display:flex;align-items:center;gap:5px;"><iconify-icon icon="lucide:speaker" style="color:#FF5F1F;font-size:14px;"></iconify-icon> 14-piece PA</span>
+                        <span style="display:flex;align-items:center;gap:5px;"><iconify-icon icon="lucide:clock" style="color:#FF5F1F;font-size:14px;"></iconify-icon> 12hr set</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Story 3 -->
-            <div class="story-card relative overflow-hidden rounded-sm cursor-default group">
-                <img src="https://picsum.photos/seed/wedding-reception-dark/500/400.jpg" alt="Wedding reception" class="story-img w-full h-56 md:h-full object-cover bw-contrast transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-                <div class="story-overlay absolute inset-0 bg-neon/5 opacity-0 transition-opacity duration-500"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-5">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="text-xs text-gray-400">Feb 2025</span>
-                        <span class="text-xs text-gray-600">•</span>
-                        <span class="text-xs text-gray-400">Petone</span>
+            <!-- Two smaller stories side by side -->
+            <div style="display:grid;grid-template-columns:1fr;gap:12px;" class="stories-sub">
+                <div class="story-card" style="position:relative;overflow:hidden;border-radius:4px;cursor:default;">
+                    <img src="https://picsum.photos/seed/outdoor-festival-crowd-night/500/400.jpg" alt="Outdoor festival" class="story-img bw-contrast" style="width:100%;height:220px;object-fit:cover;display:block;">
+                    <div style="position:absolute;inset:0;background:linear-gradient(to top, #000 0%, rgba(0,0,0,0.4) 40%, transparent 100%);"></div>
+                    <div class="story-overlay" style="position:absolute;inset:0;background:rgba(255,95,31,0.04);"></div>
+                    <div style="position:absolute;bottom:0;left:0;right:0;padding:18px 22px;">
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                            <span style="font-size:11px;color:#9ca3af;">Mar 2024</span>
+                            <span style="font-size:11px;color:#3a3a3a;">•</span>
+                            <span style="font-size:11px;color:#9ca3af;">Hutt Valley</span>
+                        </div>
+                        <h4 class="font-heading" style="font-weight:700;font-size:16px;margin-bottom:4px;">Summer Sessions — Outdoor Festival</h4>
+                        <p style="color:#6b7280;font-size:12px;line-height:1.5;">2000+ crowd, outdoor stage, full Martin Audio line array. 14 hours in variable weather. Not a single dropout.</p>
+                        <div style="display:flex;align-items:center;gap:12px;font-size:11px;color:#3a3a3a;margin-top:8px;">
+                            <span style="display:flex;align-items:center;gap:4px;"><iconify-icon icon="lucide:users" style="color:#FF5F1F;font-size:12px;"></iconify-icon> 2000+</span>
+                            <span style="display:flex;align-items:center;gap:4px;"><iconify-icon icon="lucide:sun" style="color:#FF5F1F;font-size:12px;"></iconify-icon> Outdoor</span>
+                        </div>
                     </div>
-                    <h4 class="font-heading font-bold text-base mb-1">Private Wedding — "Don't Tell the Parents"</h4>
-                    <p class="text-gray-500 text-xs leading-relaxed">XDJ-AZ setup, 4-top PA, Shure wireless for speeches. The bride's dad ended up DJing for 2 hours. Legendary.</p>
-                    <div class="flex items-center gap-3 text-xs text-gray-600 mt-2">
-                        <span class="flex items-center gap-1"><iconify-icon icon="lucide:users" class="text-neon text-[10px]"></iconify-icon> 150</span>
-                        <span class="flex items-center gap-1"><iconify-icon icon="lucide:heart" class="text-neon text-[10px]"></iconify-icon> Private</span>
+                </div>
+                <div class="story-card" style="position:relative;overflow:hidden;border-radius:4px;cursor:default;">
+                    <img src="https://picsum.photos/seed/dark-wedding-dancefloor/500/400.jpg" alt="Wedding" class="story-img bw-contrast" style="width:100%;height:220px;object-fit:cover;display:block;">
+                    <div style="position:absolute;inset:0;background:linear-gradient(to top, #000 0%, rgba(0,0,0,0.4) 40%, transparent 100%);"></div>
+                    <div class="story-overlay" style="position:absolute;inset:0;background:rgba(255,95,31,0.04);"></div>
+                    <div style="position:absolute;bottom:0;left:0;right:0;padding:18px 22px;">
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                            <span style="font-size:11px;color:#9ca3af;">Feb 2025</span>
+                            <span style="font-size:11px;color:#3a3a3a;">•</span>
+                            <span style="font-size:11px;color:#9ca3af;">Petone</span>
+                        </div>
+                        <h4 class="font-heading" style="font-weight:700;font-size:16px;margin-bottom:4px;">Private Wedding — "Don't Tell the Parents"</h4>
+                        <p style="color:#6b7280;font-size:12px;line-height:1.5;">XDJ-AZ setup, 4-top PA, Shure wireless for speeches. The bride's dad ended up DJing for 2 hours.</p>
+                        <div style="display:flex;align-items:center;gap:12px;font-size:11px;color:#3a3a3a;margin-top:8px;">
+                            <span style="display:flex;align-items:center;gap:4px;"><iconify-icon icon="lucide:users" style="color:#FF5F1F;font-size:12px;"></iconify-icon> 150</span>
+                            <span style="display:flex;align-items:center;gap:4px;"><iconify-icon icon="lucide:heart" style="color:#FF5F1F;font-size:12px;"></iconify-icon> Private</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- More stories strip -->
-        <div class="mt-4 grid sm:grid-cols-3 gap-4">
-            <div class="bg-dark-700 border border-white/5 rounded-sm p-5 hover:border-neon/20 transition-colors">
-                <div class="flex items-center gap-2 mb-2">
-                    <iconify-icon icon="lucide:building-2" class="text-neon text-sm"></iconify-icon>
-                    <span class="text-[10px] font-geist font-bold uppercase tracking-widest text-gray-500">Corporate</span>
+        <!-- Extra stories strip -->
+        <div style="margin-top:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;">
+            <div style="background:#171717;border:1px solid rgba(255,255,255,0.05);border-radius:4px;padding:20px;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(255,95,31,0.2)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                    <iconify-icon icon="lucide:building-2" style="color:#FF5F1F;font-size:14px;"></iconify-icon>
+                    <span style="font-size:9px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;">Corporate</span>
                 </div>
-                <h5 class="font-heading font-semibold text-sm mb-1">Tech Company Launch Night</h5>
-                <p class="text-gray-600 text-xs">Te Papa convention floor. Full PA + DJ booth + wireless mics. 400 guests, seamless execution.</p>
+                <h5 class="font-heading" style="font-weight:600;font-size:14px;margin-bottom:6px;">Tech Company Launch Night</h5>
+                <p style="color:#3a3a3a;font-size:12px;line-height:1.5;">Te Papa convention floor. Full PA + DJ booth + wireless mics. 400 guests, seamless execution.</p>
             </div>
-            <div class="bg-dark-700 border border-white/5 rounded-sm p-5 hover:border-neon/20 transition-colors">
-                <div class="flex items-center gap-2 mb-2">
-                    <iconify-icon icon="lucide:moon" class="text-neon text-sm"></iconify-icon>
-                    <span class="text-[10px] font-geist font-bold uppercase tracking-widest text-gray-500">Underground</span>
+            <div style="background:#171717;border:1px solid rgba(255,255,255,0.05);border-radius:4px;padding:20px;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(255,95,31,0.2)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                    <iconify-icon icon="lucide:moon" style="color:#FF5F1F;font-size:14px;"></iconify-icon>
+                    <span style="font-size:9px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;">Underground</span>
                 </div>
-                <h5 class="font-heading font-semibold text-sm mb-1">Basement Sessions Vol.7</h5>
-                <p class="text-gray-600 text-xs">Intimate 120-cap basement. XDJ-AZ, 2x X15 + 2x XP118. Tight, heavy, perfect.</p>
+                <h5 class="font-heading" style="font-weight:600;font-size:14px;margin-bottom:6px;">Basement Sessions Vol.7</h5>
+                <p style="color:#3a3a3a;font-size:12px;line-height:1.5;">Intimate 120-cap basement. XDJ-AZ, 2x X15 + 2x XP118. Tight, heavy, perfect.</p>
             </div>
-            <div class="bg-dark-700 border border-white/5 rounded-sm p-5 hover:border-neon/20 transition-colors">
-                <div class="flex items-center gap-2 mb-2">
-                    <iconify-icon icon="lucide:mountain" class="text-neon text-sm"></iconify-icon>
-                    <span class="text-[10px] font-geist font-bold uppercase tracking-widest text-gray-500">Regional</span>
+            <div style="background:#171717;border:1px solid rgba(255,255,255,0.05);border-radius:4px;padding:20px;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(255,95,31,0.2)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                    <iconify-icon icon="lucide:mountain" style="color:#FF5F1F;font-size:14px;"></iconify-icon>
+                    <span style="font-size:9px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;">Regional</span>
                 </div>
-                <h5 class="font-heading font-semibold text-sm mb-1">Kapiti Coast Music Festival</h5>
-                <p class="text-gray-600 text-xs">Full outdoor deployment, 1500 pax, 8-hour program. We drove the gear, tuned the rig, made it happen.</p>
+                <h5 class="font-heading" style="font-weight:600;font-size:14px;margin-bottom:6px;">Kapiti Coast Music Festival</h5>
+                <p style="color:#3a3a3a;font-size:12px;line-height:1.5;">Full outdoor deployment, 1500 pax, 8-hour program. We drove the gear, tuned the rig, made it happen.</p>
             </div>
         </div>
     </div>
@@ -852,161 +814,158 @@
 
 <div class="neon-divider"></div>
 
-<!-- BOOKING SECTION -->
-<section id="booking" class="py-16 md:py-24 relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="grid md:grid-cols-12 gap-8 md:gap-12">
-
-            <!-- Left: Info -->
-            <div class="md:col-span-5">
-                <span class="text-xs font-geist font-semibold uppercase tracking-[0.2em] text-neon mb-3 block">05 — Book Us</span>
-                <h2 class="font-heading font-bold text-3xl md:text-5xl tracking-tight leading-tight mb-6">
+<!-- ==================== BOOKING ==================== -->
+<section id="booking" style="padding:64px 0 96px;">
+    <div style="max-width:1280px;margin:0 auto;padding:0 20px;">
+        <div style="display:grid;grid-template-columns:1fr;gap:40px;" class="booking-grid">
+            <!-- Left info -->
+            <div>
+                <span style="font-size:11px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:#FF5F1F;display:block;margin-bottom:12px;">05 — Book Us</span>
+                <h2 class="font-heading" style="font-weight:700;font-size:clamp(28px,4vw,48px);line-height:1.05;letter-spacing:-0.03em;margin-bottom:24px;">
                     LET'S MAKE<br>
-                    <span class="text-neon neon-text-glow">SOMETHING LOUD</span>
+                    <span class="neon-text-glow" style="color:#FF5F1F;">SOMETHING LOUD</span>
                 </h2>
-                <p class="text-gray-400 text-sm leading-relaxed mb-8">
+                <p style="color:#9ca3af;font-size:14px;line-height:1.6;margin-bottom:32px;">
                     Tell us about your event and we'll put together a custom sound package. Whether it's a warehouse rave, a wedding, or a festival — we've got the gear and the crew.
                 </p>
 
-                <!-- Contact info -->
-                <div class="space-y-4 mb-8">
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 bg-dark-500 rounded-sm flex items-center justify-center">
-                            <iconify-icon icon="lucide:map-pin" class="text-neon text-sm"></iconify-icon>
+                <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:32px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div style="width:36px;height:36px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                            <iconify-icon icon="lucide:map-pin" style="color:#FF5F1F;font-size:15px;"></iconify-icon>
                         </div>
                         <div>
-                            <div class="text-xs text-gray-500 uppercase tracking-wider">Location</div>
-                            <div class="text-sm font-medium">Wellington, New Zealand</div>
+                            <div style="font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:0.1em;">Location</div>
+                            <div style="font-size:14px;font-weight:500;">Wellington, New Zealand</div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 bg-dark-500 rounded-sm flex items-center justify-center">
-                            <iconify-icon icon="lucide:truck" class="text-neon text-sm"></iconify-icon>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div style="width:36px;height:36px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                            <iconify-icon icon="lucide:truck" style="color:#FF5F1F;font-size:15px;"></iconify-icon>
                         </div>
                         <div>
-                            <div class="text-xs text-gray-500 uppercase tracking-wider">Service Area</div>
-                            <div class="text-sm font-medium">Welly, Hutt Valley, Kapiti, Porirua, Wairarapa</div>
+                            <div style="font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:0.1em;">Service Area</div>
+                            <div style="font-size:14px;font-weight:500;">Welly, Hutt Valley, Kapiti, Porirua, Wairarapa</div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 bg-dark-500 rounded-sm flex items-center justify-center">
-                            <iconify-icon icon="lucide:clock" class="text-neon text-sm"></iconify-icon>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div style="width:36px;height:36px;background:#1E1E1E;border-radius:3px;display:flex;align-items:center;justify-content:center;">
+                            <iconify-icon icon="lucide:clock" style="color:#FF5F1F;font-size:15px;"></iconify-icon>
                         </div>
                         <div>
-                            <div class="text-xs text-gray-500 uppercase tracking-wider">Response Time</div>
-                            <div class="text-sm font-medium">Within 4 hours (usually faster)</div>
+                            <div style="font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:0.1em;">Response Time</div>
+                            <div style="font-size:14px;font-weight:500;">Within 4 hours (usually faster)</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Social -->
-                <div class="flex items-center gap-3">
-                    <a href="#" class="w-10 h-10 bg-dark-500 border border-white/5 rounded-sm flex items-center justify-center hover:border-neon/30 hover:bg-neon/5 transition-all">
-                        <iconify-icon icon="lucide:instagram" class="text-silver text-lg"></iconify-icon>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <a href="#" style="width:40px;height:40px;background:#1E1E1E;border:1px solid rgba(255,255,255,0.05);border-radius:3px;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all 0.3s;" onmouseover="this.style.borderColor='rgba(255,95,31,0.3)';this.style.background='rgba(255,95,31,0.05)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)';this.style.background='#1E1E1E'">
+                        <iconify-icon icon="lucide:instagram" style="color:#A8A9AD;font-size:18px;"></iconify-icon>
                     </a>
-                    <a href="#" class="w-10 h-10 bg-dark-500 border border-white/5 rounded-sm flex items-center justify-center hover:border-neon/30 hover:bg-neon/5 transition-all">
-                        <iconify-icon icon="lucide:facebook" class="text-silver text-lg"></iconify-icon>
+                    <a href="#" style="width:40px;height:40px;background:#1E1E1E;border:1px solid rgba(255,255,255,0.05);border-radius:3px;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all 0.3s;" onmouseover="this.style.borderColor='rgba(255,95,31,0.3)';this.style.background='rgba(255,95,31,0.05)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)';this.style.background='#1E1E1E'">
+                        <iconify-icon icon="lucide:facebook" style="color:#A8A9AD;font-size:18px;"></iconify-icon>
                     </a>
-                    <a href="#" class="w-10 h-10 bg-dark-500 border border-white/5 rounded-sm flex items-center justify-center hover:border-neon/30 hover:bg-neon/5 transition-all">
-                        <iconify-icon icon="lucide:youtube" class="text-silver text-lg"></iconify-icon>
+                    <a href="#" style="width:40px;height:40px;background:#1E1E1E;border:1px solid rgba(255,255,255,0.05);border-radius:3px;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all 0.3s;" onmouseover="this.style.borderColor='rgba(255,95,31,0.3)';this.style.background='rgba(255,95,31,0.05)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)';this.style.background='#1E1E1E'">
+                        <iconify-icon icon="lucide:youtube" style="color:#A8A9AD;font-size:18px;"></iconify-icon>
                     </a>
-                    <a href="#" class="w-10 h-10 bg-dark-500 border border-white/5 rounded-sm flex items-center justify-center hover:border-neon/30 hover:bg-neon/5 transition-all">
-                        <iconify-icon icon="lucide:mail" class="text-silver text-lg"></iconify-icon>
+                    <a href="#" style="width:40px;height:40px;background:#1E1E1E;border:1px solid rgba(255,255,255,0.05);border-radius:3px;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all 0.3s;" onmouseover="this.style.borderColor='rgba(255,95,31,0.3)';this.style.background='rgba(255,95,31,0.05)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)';this.style.background='#1E1E1E'">
+                        <iconify-icon icon="lucide:mail" style="color:#A8A9AD;font-size:18px;"></iconify-icon>
                     </a>
                 </div>
             </div>
 
-            <!-- Right: Form -->
-            <div class="md:col-span-7">
-                <form id="bookingForm" class="bg-dark-700 border border-white/5 rounded-sm p-6 md:p-8">
-                    <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <!-- Right form -->
+            <div>
+                <form id="bookingForm" style="background:#171717;border:1px solid rgba(255,255,255,0.05);border-radius:4px;padding:28px 32px;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;" class="form-2col">
                         <div>
-                            <label class="block text-xs font-geist font-semibold uppercase tracking-wider text-gray-500 mb-2">Your Name *</label>
-                            <input type="text" required class="w-full bg-dark-500 border border-white/10 rounded-sm px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-neon/50 focus:ring-1 focus:ring-neon/20 transition-all" placeholder="John Doe">
+                            <label style="display:block;font-size:10px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;margin-bottom:6px;">Your Name *</label>
+                            <input type="text" required style="width:100%;background:#1E1E1E;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:12px 14px;font-size:13px;color:#fff;outline:none;transition:border-color 0.2s;" placeholder="John Doe" onfocus="this.style.borderColor='rgba(255,95,31,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
                         </div>
                         <div>
-                            <label class="block text-xs font-geist font-semibold uppercase tracking-wider text-gray-500 mb-2">Email *</label>
-                            <input type="email" required class="w-full bg-dark-500 border border-white/10 rounded-sm px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-neon/50 focus:ring-1 focus:ring-neon/20 transition-all" placeholder="john@example.com">
-                        </div>
-                    </div>
-                    <div class="grid sm:grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label class="block text-xs font-geist font-semibold uppercase tracking-wider text-gray-500 mb-2">Phone</label>
-                            <input type="tel" class="w-full bg-dark-500 border border-white/10 rounded-sm px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-neon/50 focus:ring-1 focus:ring-neon/20 transition-all" placeholder="021 123 4567">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-geist font-semibold uppercase tracking-wider text-gray-500 mb-2">Event Date *</label>
-                            <input type="date" required class="w-full bg-dark-500 border border-white/10 rounded-sm px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-neon/50 focus:ring-1 focus:ring-neon/20 transition-all">
+                            <label style="display:block;font-size:10px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;margin-bottom:6px;">Email *</label>
+                            <input type="email" required style="width:100%;background:#1E1E1E;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:12px 14px;font-size:13px;color:#fff;outline:none;transition:border-color 0.2s;" placeholder="john@example.com" onfocus="this.style.borderColor='rgba(255,95,31,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
                         </div>
                     </div>
-                    <div class="mb-4">
-                        <label class="block text-xs font-geist font-semibold uppercase tracking-wider text-gray-500 mb-2">Event Type *</label>
-                        <select required class="w-full bg-dark-500 border border-white/10 rounded-sm px-4 py-3 text-sm text-white focus:outline-none focus:border-neon/50 focus:ring-1 focus:ring-neon/20 transition-all appearance-none cursor-pointer">
-                            <option value="" class="text-gray-600">Select event type</option>
-                            <option>Rave / Warehouse Party</option>
-                            <option>Festival / Outdoor Event</option>
-                            <option>Wedding / Private Function</option>
-                            <option>Corporate Event</option>
-                            <option>Club Night / Venue</option>
-                            <option>Concert / Live Music</option>
-                            <option>Other</option>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;" class="form-2col">
+                        <div>
+                            <label style="display:block;font-size:10px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;margin-bottom:6px;">Phone</label>
+                            <input type="tel" style="width:100%;background:#1E1E1E;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:12px 14px;font-size:13px;color:#fff;outline:none;transition:border-color 0.2s;" placeholder="021 123 4567" onfocus="this.style.borderColor='rgba(255,95,31,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:10px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;margin-bottom:6px;">Event Date *</label>
+                            <input type="date" required style="width:100%;background:#1E1E1E;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:12px 14px;font-size:13px;color:#fff;outline:none;transition:border-color 0.2s;color-scheme:dark;" onfocus="this.style.borderColor='rgba(255,95,31,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                        </div>
+                    </div>
+                    <div style="margin-bottom:12px;">
+                        <label style="display:block;font-size:10px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;margin-bottom:6px;">Event Type *</label>
+                        <select required style="width:100%;background:#1E1E1E;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:12px 14px;font-size:13px;color:#fff;outline:none;appearance:none;cursor:pointer;transition:border-color 0.2s;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%236b7280%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>');background-repeat:no-repeat;background-position:right 14px center;" onfocus="this.style.borderColor='rgba(255,95,31,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                            <option value="" style="background:#1E1E1E;">Select event type</option>
+                            <option style="background:#1E1E1E;">Rave / Warehouse Party</option>
+                            <option style="background:#1E1E1E;">Festival / Outdoor Event</option>
+                            <option style="background:#1E1E1E;">Wedding / Private Function</option>
+                            <option style="background:#1E1E1E;">Corporate Event</option>
+                            <option style="background:#1E1E1E;">Club Night / Venue</option>
+                            <option style="background:#1E1E1E;">Concert / Live Music</option>
+                            <option style="background:#1E1E1E;">Other</option>
                         </select>
                     </div>
-                    <div class="grid sm:grid-cols-2 gap-4 mb-4">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;" class="form-2col">
                         <div>
-                            <label class="block text-xs font-geist font-semibold uppercase tracking-wider text-gray-500 mb-2">Expected Attendance</label>
-                            <select class="w-full bg-dark-500 border border-white/10 rounded-sm px-4 py-3 text-sm text-white focus:outline-none focus:border-neon/50 focus:ring-1 focus:ring-neon/20 transition-all appearance-none cursor-pointer">
-                                <option value="">Select range</option>
-                                <option>Under 50</option>
-                                <option>50 - 150</option>
-                                <option>150 - 500</option>
-                                <option>500 - 1000</option>
-                                <option>1000+</option>
+                            <label style="display:block;font-size:10px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;margin-bottom:6px;">Expected Attendance</label>
+                            <select style="width:100%;background:#1E1E1E;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:12px 14px;font-size:13px;color:#fff;outline:none;appearance:none;cursor:pointer;transition:border-color 0.2s;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%236b7280%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>');background-repeat:no-repeat;background-position:right 14px center;" onfocus="this.style.borderColor='rgba(255,95,31,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                                <option value="" style="background:#1E1E1E;">Select range</option>
+                                <option style="background:#1E1E1E;">Under 50</option>
+                                <option style="background:#1E1E1E;">50 - 150</option>
+                                <option style="background:#1E1E1E;">150 - 500</option>
+                                <option style="background:#1E1E1E;">500 - 1000</option>
+                                <option style="background:#1E1E1E;">1000+</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-geist font-semibold uppercase tracking-wider text-gray-500 mb-2">Venue / Location</label>
-                            <input type="text" class="w-full bg-dark-500 border border-white/10 rounded-sm px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-neon/50 focus:ring-1 focus:ring-neon/20 transition-all" placeholder="e.g. Town Hall, Warehouse TBA">
+                            <label style="display:block;font-size:10px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;margin-bottom:6px;">Venue / Location</label>
+                            <input type="text" style="width:100%;background:#1E1E1E;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:12px 14px;font-size:13px;color:#fff;outline:none;transition:border-color 0.2s;" placeholder="e.g. Town Hall, Warehouse TBA" onfocus="this.style.borderColor='rgba(255,95,31,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
                         </div>
                     </div>
-                    <div class="mb-4">
-                        <label class="block text-xs font-geist font-semibold uppercase tracking-wider text-gray-500 mb-2">What Do You Need?</label>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                            <label class="flex items-center gap-2 bg-dark-500 border border-white/5 rounded-sm px-3 py-2.5 cursor-pointer hover:border-neon/20 transition-colors has-[:checked]:border-neon/40 has-[:checked]:bg-neon/5">
-                                <input type="checkbox" class="accent-neon w-3.5 h-3.5 rounded">
-                                <span class="text-xs text-gray-400">PA System</span>
+                    <div style="margin-bottom:12px;">
+                        <label style="display:block;font-size:10px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;margin-bottom:8px;">What Do You Need?</label>
+                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;" class="checkbox-grid">
+                            <label style="display:flex;align-items:center;gap:8px;background:#1E1E1E;border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:10px 12px;cursor:pointer;transition:all 0.2s;font-size:12px;color:#9ca3af;" onmouseover="this.style.borderColor='rgba(255,95,31,0.2)'" onmouseout="if(!this.querySelector('input').checked)this.style.borderColor='rgba(255,255,255,0.05)'">
+                                <input type="checkbox" onchange="this.closest('label').style.borderColor=this.checked?'rgba(255,95,31,0.4)':'rgba(255,255,255,0.05)';this.closest('label').style.background=this.checked?'rgba(255,95,31,0.05)':'#1E1E1E'">
+                                PA System
                             </label>
-                            <label class="flex items-center gap-2 bg-dark-500 border border-white/5 rounded-sm px-3 py-2.5 cursor-pointer hover:border-neon/20 transition-colors has-[:checked]:border-neon/40 has-[:checked]:bg-neon/5">
-                                <input type="checkbox" class="accent-neon w-3.5 h-3.5 rounded">
-                                <span class="text-xs text-gray-400">DJ Equipment</span>
+                            <label style="display:flex;align-items:center;gap:8px;background:#1E1E1E;border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:10px 12px;cursor:pointer;transition:all 0.2s;font-size:12px;color:#9ca3af;" onmouseover="this.style.borderColor='rgba(255,95,31,0.2)'" onmouseout="if(!this.querySelector('input').checked)this.style.borderColor='rgba(255,255,255,0.05)'">
+                                <input type="checkbox" onchange="this.closest('label').style.borderColor=this.checked?'rgba(255,95,31,0.4)':'rgba(255,255,255,0.05)';this.closest('label').style.background=this.checked?'rgba(255,95,31,0.05)':'#1E1E1E'">
+                                DJ Equipment
                             </label>
-                            <label class="flex items-center gap-2 bg-dark-500 border border-white/5 rounded-sm px-3 py-2.5 cursor-pointer hover:border-neon/20 transition-colors has-[:checked]:border-neon/40 has-[:checked]:bg-neon/5">
-                                <input type="checkbox" class="accent-neon w-3.5 h-3.5 rounded">
-                                <span class="text-xs text-gray-400">Subwoofers</span>
+                            <label style="display:flex;align-items:center;gap:8px;background:#1E1E1E;border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:10px 12px;cursor:pointer;transition:all 0.2s;font-size:12px;color:#9ca3af;" onmouseover="this.style.borderColor='rgba(255,95,31,0.2)'" onmouseout="if(!this.querySelector('input').checked)this.style.borderColor='rgba(255,255,255,0.05)'">
+                                <input type="checkbox" onchange="this.closest('label').style.borderColor=this.checked?'rgba(255,95,31,0.4)':'rgba(255,255,255,0.05)';this.closest('label').style.background=this.checked?'rgba(255,95,31,0.05)':'#1E1E1E'">
+                                Subwoofers
                             </label>
-                            <label class="flex items-center gap-2 bg-dark-500 border border-white/5 rounded-sm px-3 py-2.5 cursor-pointer hover:border-neon/20 transition-colors has-[:checked]:border-neon/40 has-[:checked]:bg-neon/5">
-                                <input type="checkbox" class="accent-neon w-3.5 h-3.5 rounded">
-                                <span class="text-xs text-gray-400">Wireless Mics</span>
+                            <label style="display:flex;align-items:center;gap:8px;background:#1E1E1E;border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:10px 12px;cursor:pointer;transition:all 0.2s;font-size:12px;color:#9ca3af;" onmouseover="this.style.borderColor='rgba(255,95,31,0.2)'" onmouseout="if(!this.querySelector('input').checked)this.style.borderColor='rgba(255,255,255,0.05)'">
+                                <input type="checkbox" onchange="this.closest('label').style.borderColor=this.checked?'rgba(255,95,31,0.4)':'rgba(255,255,255,0.05)';this.closest('label').style.background=this.checked?'rgba(255,95,31,0.05)':'#1E1E1E'">
+                                Wireless Mics
                             </label>
-                            <label class="flex items-center gap-2 bg-dark-500 border border-white/5 rounded-sm px-3 py-2.5 cursor-pointer hover:border-neon/20 transition-colors has-[:checked]:border-neon/40 has-[:checked]:bg-neon/5">
-                                <input type="checkbox" class="accent-neon w-3.5 h-3.5 rounded">
-                                <span class="text-xs text-gray-400">Turntables</span>
+                            <label style="display:flex;align-items:center;gap:8px;background:#1E1E1E;border:1px solid rgba(255,255,255,0.05);border-radius:3px;padding:10px 12px;cursor:pointer;transition:all 0.2s;font-size:12px;color:#9ca3af;" onmouseover="this.style.borderColor='rgba(255,95,31,0.2)'" onmouseout="if(!this.querySelector('input').checked)this.style.borderColor='rgba(255,255,255,0.05)'">
+                                <input type="checkbox" onchange="this.closest('label').style.borderColor=this.checked?'rgba(255,95,31,0.4)':'rgba(255,255,255,0.05)';this.closest('label').style.background=this.checked?'rgba(255,95,31,0.05)':'#1E1E1E'">
+                                Turntables
                             </label>
-                            <label class="flex items-center gap-2 bg-dark-500 border border-white/5 rounded-sm px-3 py-2.5 cursor-pointer hover:border-neon/20 transition-colors has-[:checked]:border-neon/40 has-[:checked]:bg-neon/5">
-                                <input type="checkbox" class="accent-neon w-3.5 h-3.5 rounded">
-                                <span class="text-xs text-gray-400">Full Setup</span>
+                            <label style="display:flex;align-items:center;gap:8px;background:#1E1E1E;border:1px solid rgba(255,255,31,0.05);border-radius:3px;padding:10px 12px;cursor:pointer;transition:all 0.2s;font-size:12px;color:#9ca3af;" onmouseover="this.style.borderColor='rgba(255,95,31,0.2)'" onmouseout="if(!this.querySelector('input').checked)this.style.borderColor='rgba(255,255,255,0.05)'">
+                                <input type="checkbox" onchange="this.closest('label').style.borderColor=this.checked?'rgba(255,95,31,0.4)':'rgba(255,255,255,0.05)';this.closest('label').style.background=this.checked?'rgba(255,95,31,0.05)':'#1E1E1E'">
+                                Full Setup
                             </label>
                         </div>
                     </div>
-                    <div class="mb-6">
-                        <label class="block text-xs font-geist font-semibold uppercase tracking-wider text-gray-500 mb-2">Tell Us More</label>
-                        <textarea rows="3" class="w-full bg-dark-500 border border-white/10 rounded-sm px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-neon/50 focus:ring-1 focus:ring-neon/20 transition-all resize-none" placeholder="Lineup details, venue specifics, special requirements..."></textarea>
+                    <div style="margin-bottom:20px;">
+                        <label style="display:block;font-size:10px;font-family:'Geist',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;margin-bottom:6px;">Tell Us More</label>
+                        <textarea rows="3" style="width:100%;background:#1E1E1E;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:12px 14px;font-size:13px;color:#fff;outline:none;resize:none;transition:border-color 0.2s;font-family:'Inter',sans-serif;" placeholder="Lineup details, venue specifics, special requirements..." onfocus="this.style.borderColor='rgba(255,95,31,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
                     </div>
-                    <button type="submit" class="w-full bg-neon text-black font-heading font-bold text-sm py-4 rounded-sm hover:bg-neonLight transition-colors neon-glow flex items-center justify-center gap-2">
+                    <button type="submit" style="width:100%;background:#FF5F1F;color:#000;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;padding:16px;border-radius:3px;border:none;cursor:pointer;box-shadow:0 0 30px rgba(255,95,31,0.3);display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.2s;" onmouseover="this.style.background='#FF8A4C'" onmouseout="this.style.background='#FF5F1F'">
                         SEND BOOKING REQUEST
-                        <iconify-icon icon="lucide:arrow-right" class="text-lg"></iconify-icon>
+                        <iconify-icon icon="lucide:arrow-right" style="font-size:18px;"></iconify-icon>
                     </button>
-                    <p class="text-center text-xs text-gray-600 mt-3">We'll get back to you within 4 hours. No obligation, no spam.</p>
+                    <p style="text-align:center;font-size:11px;color:#3a3a3a;margin-top:10px;">We'll get back to you within 4 hours. No obligation, no spam.</p>
                 </form>
             </div>
         </div>
@@ -1015,169 +974,186 @@
 
 <div class="neon-divider"></div>
 
-<!-- FOOTER -->
-<footer class="py-12 md:py-16 bg-dark-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            <!-- Brand -->
-            <div class="lg:col-span-1">
-                <div class="flex items-center gap-2.5 mb-4">
-                    <div class="w-8 h-8 bg-neon rounded-sm flex items-center justify-center neon-glow-sm">
-                        <iconify-icon icon="lucide:volume-2" class="text-black text-lg"></iconify-icon>
+<!-- ==================== FOOTER ==================== -->
+<footer style="padding:48px 0 64px;background:#0A0A0A;">
+    <div style="max-width:1280px;margin:0 auto;padding:0 20px;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:32px;margin-bottom:40px;">
+            <div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                    <div style="width:32px;height:32px;background:#FF5F1F;border-radius:3px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(255,95,31,0.25);">
+                        <iconify-icon icon="lucide:volume-2" style="color:#000;font-size:16px;"></iconify-icon>
                     </div>
-                    <span class="font-heading font-bold text-lg tracking-tight">SOUNDHAUS</span>
+                    <span class="font-heading" style="font-weight:700;font-size:17px;letter-spacing:-0.02em;">SOUNDHAUS</span>
                 </div>
-                <p class="text-gray-500 text-xs leading-relaxed mb-4">Premium audio rental for Wellington and the greater region. Festival-grade sound for every event.</p>
-                <div class="flex items-center gap-2 text-xs text-gray-600">
-                    <iconify-icon icon="lucide:map-pin" class="text-neon text-sm"></iconify-icon>
+                <p style="color:#6b7280;font-size:12px;line-height:1.6;margin-bottom:12px;">Premium audio rental for Wellington and the greater region. Festival-grade sound for every event.</p>
+                <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#3a3a3a;">
+                    <iconify-icon icon="lucide:map-pin" style="color:#FF5F1F;font-size:14px;"></iconify-icon>
                     Wellington, New Zealand
                 </div>
             </div>
-
-            <!-- Quick Links -->
             <div>
-                <h5 class="text-xs font-geist font-bold uppercase tracking-widest text-gray-400 mb-4">Navigate</h5>
-                <div class="flex flex-col gap-2.5">
-                    <a href="#sound" class="text-sm text-gray-500 hover:text-neon transition-colors">Our Sound</a>
-                    <a href="#team" class="text-sm text-gray-500 hover:text-neon transition-colors">The Team</a>
-                    <a href="#equipment" class="text-sm text-gray-500 hover:text-neon transition-colors">Equipment</a>
-                    <a href="#stories" class="text-sm text-gray-500 hover:text-neon transition-colors">Event Stories</a>
-                    <a href="#booking" class="text-sm text-gray-500 hover:text-neon transition-colors">Make a Booking</a>
+                <h5 style="font-size:10px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;margin-bottom:14px;">Navigate</h5>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                    <a href="#sound" style="font-size:13px;color:#6b7280;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#FF5F1F'" onmouseout="this.style.color='#6b7280'">Our Sound</a>
+                    <a href="#team" style="font-size:13px;color:#6b7280;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#FF5F1F'" onmouseout="this.style.color='#6b7280'">The Team</a>
+                    <a href="#equipment" style="font-size:13px;color:#6b7280;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#FF5F1F'" onmouseout="this.style.color='#6b7280'">Equipment</a>
+                    <a href="#stories" style="font-size:13px;color:#6b7280;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#FF5F1F'" onmouseout="this.style.color='#6b7280'">Event Stories</a>
+                    <a href="#booking" style="font-size:13px;color:#6b7280;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#FF5F1F'" onmouseout="this.style.color='#6b7280'">Make a Booking</a>
                 </div>
             </div>
-
-            <!-- Services -->
             <div>
-                <h5 class="text-xs font-geist font-bold uppercase tracking-widest text-gray-400 mb-4">Services</h5>
-                <div class="flex flex-col gap-2.5">
-                    <span class="text-sm text-gray-500">PA System Rental</span>
-                    <span class="text-sm text-gray-500">DJ Equipment Hire</span>
-                    <span class="text-sm text-gray-500">Sound Engineering</span>
-                    <span class="text-sm text-gray-500">Event Production</span>
-                    <span class="text-sm text-gray-500">Equipment Delivery & Setup</span>
+                <h5 style="font-size:10px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;margin-bottom:14px;">Services</h5>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                    <span style="font-size:13px;color:#6b7280;">PA System Rental</span>
+                    <span style="font-size:13px;color:#6b7280;">DJ Equipment Hire</span>
+                    <span style="font-size:13px;color:#6b7280;">Sound Engineering</span>
+                    <span style="font-size:13px;color:#6b7280;">Event Production</span>
+                    <span style="font-size:13px;color:#6b7280;">Delivery &amp; Setup</span>
                 </div>
             </div>
-
-            <!-- Service Area -->
             <div>
-                <h5 class="text-xs font-geist font-bold uppercase tracking-widest text-gray-400 mb-4">Service Area</h5>
-                <div class="flex flex-col gap-2.5">
-                    <span class="text-sm text-gray-500">Wellington CBD</span>
-                    <span class="text-sm text-gray-500">Te Aro & Courtenay Place</span>
-                    <span class="text-sm text-gray-500">Hutt Valley</span>
-                    <span class="text-sm text-gray-500">Porirua & Kapiti Coast</span>
-                    <span class="text-sm text-gray-500">Wairarapa Region</span>
+                <h5 style="font-size:10px;font-family:'Geist',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#6b7280;margin-bottom:14px;">Service Area</h5>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                    <span style="font-size:13px;color:#6b7280;">Wellington CBD</span>
+                    <span style="font-size:13px;color:#6b7280;">Te Aro &amp; Courtenay Place</span>
+                    <span style="font-size:13px;color:#6b7280;">Hutt Valley</span>
+                    <span style="font-size:13px;color:#6b7280;">Porirua &amp; Kapiti Coast</span>
+                    <span style="font-size:13px;color:#6b7280;">Wairarapa Region</span>
                 </div>
             </div>
         </div>
-
-        <div class="neon-divider mb-8"></div>
-
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p class="text-xs text-gray-600">&copy; 2025 Soundhaus. All rights reserved. Wellington, New Zealand.</p>
-            <div class="flex items-center gap-4">
-                <a href="#" class="text-xs text-gray-600 hover:text-neon transition-colors">Privacy Policy</a>
-                <a href="#" class="text-xs text-gray-600 hover:text-neon transition-colors">Terms of Service</a>
+        <div class="neon-divider" style="margin-bottom:24px;"></div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+            <p style="font-size:11px;color:#3a3a3a;">&copy; 2025 Soundhaus. All rights reserved. Wellington, New Zealand.</p>
+            <div style="display:flex;align-items:center;gap:16px;">
+                <a href="#" style="font-size:11px;color:#3a3a3a;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#FF5F1F'" onmouseout="this.style.color='#3a3a3a'">Privacy Policy</a>
+                <a href="#" style="font-size:11px;color:#3a3a3a;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#FF5F1F'" onmouseout="this.style.color='#3a3a3a'">Terms of Service</a>
             </div>
         </div>
     </div>
 </footer>
 
-<!-- SCRIPTS -->
+<!-- ==================== SCRIPTS ==================== -->
 <script>
     // Mobile menu
-    const menuBtn = document.getElementById('menuBtn');
-    const closeMenuBtn = document.getElementById('closeMenu');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const menuOverlay = document.getElementById('menuOverlay');
-    const mobileLinks = document.querySelectorAll('.mobile-link');
+    var menuBtn = document.getElementById('menuBtn');
+    var closeMenuBtn = document.getElementById('closeMenu');
+    var mobileMenu = document.getElementById('mobileMenu');
+    var menuOverlay = document.getElementById('menuOverlay');
+    var mobLinks = document.querySelectorAll('.mob-link');
 
     function openMenu() {
         mobileMenu.classList.add('open');
-        menuOverlay.classList.remove('hidden');
+        menuOverlay.style.display = 'block';
         document.body.style.overflow = 'hidden';
     }
-
     function closeMenu() {
         mobileMenu.classList.remove('open');
-        menuOverlay.classList.add('hidden');
+        menuOverlay.style.display = 'none';
         document.body.style.overflow = '';
     }
 
     menuBtn.addEventListener('click', openMenu);
     closeMenuBtn.addEventListener('click', closeMenu);
     menuOverlay.addEventListener('click', closeMenu);
-    mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+    mobLinks.forEach(function(l) { l.addEventListener('click', closeMenu); });
 
-    // Toast notification
-    function showToast(message) {
-        const toast = document.getElementById('toast');
-        const toastMsg = document.getElementById('toast-msg');
-        toastMsg.textContent = message;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3500);
+    // Toast
+    function showToast(msg) {
+        var t = document.getElementById('toast');
+        document.getElementById('toast-msg').textContent = msg;
+        t.classList.add('show');
+        setTimeout(function() { t.classList.remove('show'); }, 3500);
     }
 
     // Booking form
     document.getElementById('bookingForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const btn = this.querySelector('button[type="submit"]');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<iconify-icon icon="lucide:loader-2" class="text-lg animate-spin"></iconify-icon> SENDING...';
+        var btn = this.querySelector('button[type="submit"]');
+        var orig = btn.innerHTML;
+        btn.innerHTML = '<iconify-icon icon="lucide:loader-2" style="font-size:18px;" class="spin-icon"></iconify-icon> SENDING...';
         btn.disabled = true;
-
-        setTimeout(() => {
-            btn.innerHTML = originalText;
+        btn.style.opacity = '0.7';
+        var self = this;
+        setTimeout(function() {
+            btn.innerHTML = orig;
             btn.disabled = false;
-            this.reset();
-            showToast('Booking request sent! We\'ll be in touch within 4 hours.');
+            btn.style.opacity = '1';
+            self.reset();
+            // Reset checkbox styles
+            self.querySelectorAll('label').forEach(function(l) {
+                l.style.borderColor = 'rgba(255,255,255,0.05)';
+                l.style.background = '#1E1E1E';
+            });
+            showToast("Booking request sent! We'll be in touch within 4 hours.");
         }, 1500);
     });
 
-    // Scroll-based nav background
-    const nav = document.querySelector('nav');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            nav.style.borderBottomColor = 'rgba(255,255,255,0.08)';
-            nav.style.backgroundColor = 'rgba(0,0,0,0.9)';
-        } else {
-            nav.style.borderBottomColor = 'rgba(255,255,255,0.03)';
-            nav.style.backgroundColor = 'rgba(0,0,0,0.8)';
-        }
-    });
-
-    // Intersection Observer for fade-in animations
-    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-                entry.target.style.filter = 'blur(0)';
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.equip-card, .team-card, .story-card').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.filter = 'blur(4px)';
-        el.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
-        observer.observe(el);
-    });
-
-    // Audio bars - randomize timing on scroll
-    const audioBars = document.querySelectorAll('.audio-bar');
-    function randomizeBars() {
-        audioBars.forEach(bar => {
-            const duration = 0.4 + Math.random() * 0.8;
-            const delay = Math.random() * 0.5;
-            bar.style.animationDuration = duration + 's';
-            bar.style.animationDelay = delay + 's';
+    // Audio bars randomize
+    var bars = document.querySelectorAll('.audio-bar');
+    function randomBars() {
+        bars.forEach(function(b) {
+            b.style.animationDuration = (0.4 + Math.random() * 0.8) + 's';
+            b.style.animationDelay = (Math.random() * 0.5) + 's';
         });
     }
-    randomizeBars();
-    setInterval(randomizeBars, 3000);
+    setInterval(randomBars, 3000);
+
+    // Responsive grid adjustments via JS for preview reliability
+    function applyGrids() {
+        var w = window.innerWidth;
+        // Sound section grid
+        var sg = document.querySelector('.sound-grid');
+        if (sg) {
+            if (w >= 768) {
+                sg.style.gridTemplateColumns = '7fr 5fr';
+            } else {
+                sg.style.gridTemplateColumns = '1fr';
+            }
+        }
+        // Sound cards
+        var sc = document.querySelector('.sound-cards');
+        if (sc && w >= 768) {
+            sc.style.display = 'flex';
+            sc.style.flexDirection = 'column';
+        }
+        // Stories grid
+        var stg = document.querySelector('.stories-grid');
+        if (stg && w >= 768) {
+            stg.style.gridTemplateColumns = '2fr 1fr';
+            stg.style.gridTemplateRows = '1fr 1fr';
+            stg.querySelector('.story-card').style.gridRow = '1 / 3';
+        } else if (stg) {
+            stg.style.gridTemplateColumns = '1fr';
+            stg.style.gridTemplateRows = 'auto';
+            if (stg.querySelector('.story-card')) stg.querySelector('.story-card').style.gridRow = 'auto';
+        }
+        // Stories sub
+        var sts = document.querySelector('.stories-sub');
+        if (sts && w >= 768) {
+            sts.style.display = 'flex';
+            sts.style.flexDirection = 'column';
+        }
+        // Booking grid
+        var bg = document.querySelector('.booking-grid');
+        if (bg && w >= 768) {
+            bg.style.gridTemplateColumns = '5fr 7fr';
+        }
+        // Form 2-col
+        document.querySelectorAll('.form-2col').forEach(function(el) {
+            el.style.gridTemplateColumns = w >= 640 ? '1fr 1fr' : '1fr';
+        });
+        // Checkbox grid
+        document.querySelectorAll('.checkbox-grid').forEach(function(el) {
+            if (w >= 640) {
+                el.style.gridTemplateColumns = '1fr 1fr 1fr';
+            } else {
+                el.style.gridTemplateColumns = '1fr 1fr';
+            }
+        });
+    }
+    applyGrids();
+    window.addEventListener('resize', applyGrids);
 </script>
 
 </body>
